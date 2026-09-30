@@ -8,12 +8,12 @@ import {
   TransactionId,
   TransferTransaction
 } from '@hashgraph/sdk';
-import { join } from 'node:path';
 import { createPaymentExecutionProofEvent } from '../src/lib/adapters/payment-intent-execution';
 import { createPaymentIntentProofEvent } from '../src/lib/adapters/payment-intent';
 import { formatError, formatHeadline, formatHint, formatJson, formatSuccess } from '../src/lib/cli/cli-output';
 import { loadHederaEnv } from '../src/lib/config/hedera-env';
 import { LocalProofIndex } from '../src/lib/index/local-proof-index';
+import { resolveProofIndexPath } from '../src/lib/index/proof-index-path';
 import { buildHcsProofMessage, hashCanonicalJson, type ProofEvent } from '../src/lib/proof/proof-event';
 
 const color = process.stdout.isTTY === true && process.env.NO_COLOR !== '1';
@@ -66,7 +66,7 @@ async function main(): Promise<void> {
   const actorId = `agent:payment-sandbox:${payer}`;
   const topicId = TopicId.fromString(env.topicId);
   const client = Client.forTestnet().setOperator(payer, parsePrivateKey(env.operatorKey));
-  const index = new LocalProofIndex(join(process.cwd(), '.data', 'proofs.jsonl'));
+  const index = new LocalProofIndex(resolveProofIndexPath());
 
   try {
     const intentEvent = createPaymentIntentProofEvent({

@@ -5,10 +5,10 @@ import {
   TopicMessageSubmitTransaction,
   TransactionId
 } from '@hashgraph/sdk';
-import { join } from 'node:path';
 import { formatError, formatHeadline, formatHint, formatJson, formatSuccess } from '../src/lib/cli/cli-output';
 import { loadHederaEnv } from '../src/lib/config/hedera-env';
 import { LocalProofIndex } from '../src/lib/index/local-proof-index';
+import { resolveProofIndexPath } from '../src/lib/index/proof-index-path';
 import { classifyHcsError } from '../src/lib/proof/hcs-error';
 import { buildSampleProof } from '../src/lib/proof/sample-proof';
 
@@ -37,7 +37,7 @@ async function main(): Promise<void> {
       const receipt = await txResponse.getReceipt(client);
       const sequenceNumber = receipt.topicSequenceNumber?.toString();
 
-      await new LocalProofIndex(join(process.cwd(), '.data', 'proofs.jsonl')).append(sample);
+      await new LocalProofIndex(resolveProofIndexPath()).append(sample);
 
       console.log(formatSuccess(`Proof anchored to topic ${env.topicId} as sequence ${sequenceNumber}`, { color }));
       console.log();

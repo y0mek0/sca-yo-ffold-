@@ -5,6 +5,7 @@ import { describeHederaKey, parseHederaAccountId } from '../src/lib/doctor/key-p
 import { buildProofCount, formatProofCount } from '../src/lib/doctor/proof-count';
 import { checkTokenAssociation } from '../src/lib/doctor/token-association';
 import { readLocalProofs } from '../src/lib/index/read-local-proofs';
+import { resolveProofIndexPath } from '../src/lib/index/proof-index-path';
 import { isVersionAtLeast } from '../src/lib/doctor/version';
 
 function loadDotEnvLocal(): void {
@@ -105,7 +106,7 @@ async function main(): Promise<void> {
     ]);
   }
 
-  const proofs = await readLocalProofs(join(process.cwd(), '.data', 'proofs.jsonl'));
+  const proofs = await readLocalProofs(resolveProofIndexPath());
   const proofCount = buildProofCount(proofs);
   checks.push(['Local proof index', true, formatProofCount(proofCount)]);
 

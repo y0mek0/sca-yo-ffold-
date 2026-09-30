@@ -1,4 +1,3 @@
-import { join } from 'node:path';
 import {
   Client,
   PrivateKey,
@@ -8,6 +7,7 @@ import {
 } from '@hashgraph/sdk';
 import { loadHederaEnv } from '../src/lib/config/hedera-env';
 import { LocalProofIndex } from '../src/lib/index/local-proof-index';
+import { resolveProofIndexPath } from '../src/lib/index/proof-index-path';
 import { buildHcsProofMessage, hashCanonicalJson } from '../src/lib/proof/proof-event';
 import { createResearchClaimProofEvent } from '../src/lib/adapters/research-claim';
 
@@ -18,7 +18,7 @@ function parsePrivateKey(value: string): PrivateKey {
 
 async function main(): Promise<void> {
   const env = loadHederaEnv(process.cwd());
-  const index = new LocalProofIndex(join(process.cwd(), '.data', 'proofs.jsonl'));
+  const index = new LocalProofIndex(resolveProofIndexPath());
 
   async function submitOne(label: string, actorId: string) {
     const client = Client.forTestnet().setOperator(env.operatorId, parsePrivateKey(env.operatorKey));

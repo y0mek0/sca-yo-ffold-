@@ -1,4 +1,3 @@
-import { join } from 'node:path';
 import {
   Client,
   PrivateKey,
@@ -8,6 +7,7 @@ import {
 } from '@hashgraph/sdk';
 import { loadHederaEnv } from '../src/lib/config/hedera-env';
 import { LocalProofIndex } from '../src/lib/index/local-proof-index';
+import { resolveProofIndexPath } from '../src/lib/index/proof-index-path';
 import { classifyHcsError } from '../src/lib/proof/hcs-error';
 import { buildHcsProofMessage, hashCanonicalJson } from '../src/lib/proof/proof-event';
 import { fetchGitHubRelease } from '../src/lib/adapters/http-fetcher';
@@ -51,7 +51,7 @@ async function main(): Promise<void> {
       const receipt = await tx.getReceipt(client);
       const sequenceNumber = receipt.topicSequenceNumber?.toString();
 
-      await new LocalProofIndex(join(process.cwd(), '.data', 'proofs.jsonl')).append({ event, hash, hcsMessage });
+      await new LocalProofIndex(resolveProofIndexPath()).append({ event, hash, hcsMessage });
 
       console.log(JSON.stringify({
         ok: true,

@@ -1,22 +1,19 @@
-# local reference clones
-hedera-harness/
-create-scaffold-hbar/
-
-# scaffold/dev outputs
 node_modules/
 .next/
 dist/
 build/
 coverage/
-*.tsbuildinfo
-_scaffold-tests/
-
-# local secrets/data
 .env
 .env.*
 !.env.example
 .data/
-
-# OS/editor
+.harness/runs/
+.harness/cache/
+.harness/runtime/
+.skill-cache/
 .DS_Store
 Thumbs.db
+create-scaffold-hbar/
+hedera-harness/
+
+*.tsbuildinfo
