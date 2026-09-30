@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { describeHederaKey, parseHederaAccountId } from '../src/lib/doctor/key-parser';
+import { checkTokenAssociation } from '../src/lib/doctor/token-association';
 import { isVersionAtLeast } from '../src/lib/doctor/version';
 
 function loadDotEnvLocal(): void {
@@ -32,66 +33,85 @@ const requiredNode = '20.18.3';
 
 type Check = [name: string, ok: boolean, detail: string];
 
-const checks: Check[] = [
-  ['Node version', isVersionAtLeast(process.version, requiredNode), `${process.version} >= ${requiredNode}`],
-  [
-    'HEDERA_NETWORK',
-    (process.env.HEDERA_NETWORK ?? 'testnet') === 'testnet',
-    process.env.HEDERA_NETWORK ?? 'testnet'
-  ],
-  [
-    'HEDERA_OPERATOR_ID',
-    Boolean(process.env.HEDERA_OPERATOR_ID),
-    process.env.HEDERA_OPERATOR_ID ? 'set' : 'missing; demo mode'
-  ]
-];
+async function main(): Promise<void> {
+  const checks: Check[] = [
+    ['Node version', isVersionAtLeast(process.version, requiredNode), `${process.version} >= ${requiredNode}`],
+    [
+      'HEDERA_NETWORK',
+      (process.env.HEDERA_NETWORK ?? 'testnet') === 'testnet',
+      process.env.HEDERA_NETWORK ?? 'testnet'
+    ],
+    [
+      'HEDERA_OPERATOR_ID',
+      Boolean(process.env.HEDERA_OPERATOR_ID),
+      process.env.HEDERA_OPERATOR_ID ? 'set' : 'missing; demo mode'
+    ]
+  ];
 
-const operatorKey = process.env.HEDERA_OPERATOR_KEY;
-const operatorId = process.env.HEDERA_OPERATOR_ID;
+  const operatorKey = process.env.HEDERA_OPERATOR_KEY;
+  const operatorId = process.env.HEDERA_OPERATOR_ID;
 
-if (operatorId) {
-  try {
-    parseHederaAccountId(operatorId);
-    checks.push(['HEDERA_OPERATOR_ID shape', true, `parsed ${operatorId}`]);
-  } catch (error) {
+  if (operatorId) {
+    try {
+      parseHederaAccountId(operatorId);
+      checks.push(['HEDERA_OPERATOR_ID shape', true, `parsed ${operatorId}`]);
+    } catch (error) {
+      checks.push([
+        'HEDERA_OPERATOR_ID shape',
+        false,
+        error instanceof Error ? error.message : 'unable to parse account id'
+      ]);
+    }
+  }
+
+  checks.push([
+    'HEDERA_OPERATOR_KEY',
+    Boolean(operatorKey),
+    operatorKey ? 'set' : 'missing; demo mode'
+  ]);
+
+  if (operatorKey) {
+    try {
+      const description = describeHederaKey(operatorKey);
+      checks.push(['Key format', true, `${description.format} (${description.normalized.slice(0, 12)}...)`]);
+    } catch (error) {
+      checks.push([
+        'Key format',
+        false,
+        error instanceof Error ? error.message : 'unable to parse operator key'
+      ]);
+    }
+  }
+
+  checks.push([
+    'HEDERA_MIRROR_NODE_URL',
+    true,
+    process.env.HEDERA_MIRROR_NODE_URL ?? 'https://testnet.mirrornode.hedera.com'
+  ]);
+
+  const tokenId = process.env.HEDERA_PROOF_TOKEN_ID ?? '0.0.429274';
+  const mirrorNodeUrl = process.env.HEDERA_MIRROR_NODE_URL ?? 'https://testnet.mirrornode.hedera.com';
+
+  if (operatorId) {
+    const result = await checkTokenAssociation({ accountId: operatorId, tokenId, mirrorNodeUrl });
     checks.push([
-      'HEDERA_OPERATOR_ID shape',
-      false,
-      error instanceof Error ? error.message : 'unable to parse account id'
+      'Token association',
+      result.ok,
+      result.ok ? `${tokenId} associated` : result.reason
     ]);
+  }
+
+  console.log('AgentProof HBAR Doctor');
+  for (const [name, ok, detail] of checks) {
+    console.log(`${ok ? 'OK ' : 'WARN'} ${name.padEnd(24)} ${detail}`);
+  }
+
+  if (!operatorId || !operatorKey) {
+    console.log('\nDemo mode is allowed. Add .env.local values to submit real HCS proofs.');
   }
 }
 
-checks.push([
-  'HEDERA_OPERATOR_KEY',
-  Boolean(operatorKey),
-  operatorKey ? 'set' : 'missing; demo mode'
-]);
-
-if (operatorKey) {
-  try {
-    const description = describeHederaKey(operatorKey);
-    checks.push(['Key format', true, `${description.format} (${description.normalized.slice(0, 12)}...)`]);
-  } catch (error) {
-    checks.push([
-      'Key format',
-      false,
-      error instanceof Error ? error.message : 'unable to parse operator key'
-    ]);
-  }
-}
-
-checks.push([
-  'HEDERA_MIRROR_NODE_URL',
-  true,
-  process.env.HEDERA_MIRROR_NODE_URL ?? 'https://testnet.mirrornode.hedera.com'
-]);
-
-console.log('AgentProof HBAR Doctor');
-for (const [name, ok, detail] of checks) {
-  console.log(`${ok ? 'OK ' : 'WARN'} ${name.padEnd(24)} ${detail}`);
-}
-
-if (!operatorId || !operatorKey) {
-  console.log('\nDemo mode is allowed. Add .env.local values to submit real HCS proofs.');
-}
+main().catch((error: unknown) => {
+  console.error(error instanceof Error ? error.message : error);
+  process.exitCode = 1;
+});
