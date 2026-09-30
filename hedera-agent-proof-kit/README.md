@@ -76,6 +76,28 @@ The Doctor now reports the size of the local proof index so you can tell at a gl
 
 The `add:adapter` command scaffolds a new adapter file under `packages/nextjs/src/lib/adapters/` with the correct imports, naming, and `TODO` markers. Fill them in, add a vitest file, and you can wire the adapter into a script or API route.
 
+## Who this fits best — TODO: expand with concrete workflows
+
+AgentProof is a Hedera proof layer/template, not a trading platform, compliance SaaS, database, wallet, or execution engine. Its core value is:
+
+```text
+external source → normalized event → SHA-256 → HCS → Mirror verification
+```
+
+The strongest non-crypto users are:
+
+- **Release manager / DevOps / SRE / engineering compliance** — prove release, issue, escalation, and approval events around GitHub workflows.
+- **Research or due-diligence analyst** — anchor claims, sources, data snapshots, and report versions.
+- **Document, legal, or accounting operations** — prove the integrity and existence of a particular invoice, contract, memo, or report version.
+
+The strongest crypto users are:
+
+- **Protocol researcher / crypto data analyst** — combine GitHub releases/issues, market snapshots, research claims, and report hashes.
+- **DAO treasury / grants / governance operations** — anchor proposals, policy versions, rationale, and approval decisions.
+- **Crypto risk manager / market operations** — record market signals and risk decisions around trading; AgentProof does not execute trades.
+
+Important boundary: a proof shows what was recorded and when. It does not prove that an external claim was true, that an AI decision was correct, or that a trade was profitable. The detailed personas and workflows should be expanded here as the template gains more integrations.
+
 ## Core+ working adapters
 
 1. **Research Claim Proof** — claim + sources + evidence summary become a verifiable off-chain event. Use it for research agents, due-diligence bots, fact-check pipelines.
