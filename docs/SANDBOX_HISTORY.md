@@ -547,6 +547,43 @@ sequence 30 → mirror_hash_match
 The execution event links back to the intent SHA-256 digest. This distinguishes
 what the agent intended from what Hedera actually executed.
 
+## Sandbox M — repeat regression and public clean scaffold
+
+The path and packaging regression was repeated after the Payment Intent work.
+Root and workspace commands now resolve the same `packages/nextjs/.data` index, and
+root scripts preserve CLI arguments when forwarding to workspace scripts.
+
+Live testnet repeat:
+
+```text
+HCS sample              sequence 31
+GitHub release watcher  sequence 32
+HBAR price watcher      sequence 33
+GitHub issues watcher   sequence 34
+Payment intent          sequence 35
+HBAR transfer           SUCCESS
+Payment execution       sequence 36
+Concurrent HCS writes  sequences 37, 38, 39
+```
+
+Mirror Node confirmed sequences 31 through 36. The invalid-topic negative path was
+also checked and returned the typed `invalid_topic_id` error without exposing a key.
+
+The public repository was then scaffolded from a disposable directory with
+`create-scaffold-hbar`, installed from scratch, and passed:
+
+```text
+package.json at generated project root  ✓
+npm install                            ✓
+lint                                  ✓
+typecheck                             ✓
+test                                  ✓ 29 files, 84 tests
+build                                 ✓
+doctor demo mode                      ✓
+```
+
+See `docs/BOUNTY_EVIDENCE.md` for the rubric evidence map and limitations.
+
 Implementation:
 
 - `src/lib/adapters/payment-intent-execution.ts` — validates successful
