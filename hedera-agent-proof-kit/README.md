@@ -26,11 +26,13 @@ Core includes:
 
 ## Roadmap adapters
 
-- Browser Action Proof — URL/action/result/screenshot hash for browser agents.
-- Payment Intent Proof — payer/receiver/asset/amount/policy before a payment is signed.
-- Watcher / Radar Proof — wallet, market, GitHub, or news signal proofs.
-- RAG / Memory Proof — question, answer, and retrieved chunks hash.
-- Agent Evaluation Proof — eval score, failed checks, and report hash.
+The following adapters ship as typed factories so developers can wire them in without redesigning the ProofEvent schema:
+
+- `createBrowserActionProofEvent` — URL/action/result/screenshot hash for browser agents (Browser Use, Jev, Page Agent, Iris).
+- `createPaymentIntentProofEvent` — payer/receiver/asset/amount/policy before a payment is signed (x402, Blocky402, HBAR/USDC).
+- `createWatcherSignalProofEvent` — wallet, market, GitHub, or news signal proofs (FOMO Robinhood Radar, repo watcher).
+- `createRagMemoryProofEvent` — question, answer, and retrieved chunks hash (RAGFlow, MemPalace).
+- Agent Evaluation Proof — eval score, failed checks, and report hash (iFixAI). Planned adapter.
 
 ## Quickstart
 
