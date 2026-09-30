@@ -3,13 +3,26 @@ import { dirname } from 'node:path';
 import type { SampleProof } from '../proof/sample-proof';
 
 export class LocalProofIndex {
+  private mutex: Promise<void> = Promise.resolve();
+
   constructor(private readonly filePath: string) {}
 
   async append(proof: SampleProof): Promise<void> {
-    await mkdir(dirname(this.filePath), { recursive: true });
-    const current = await this.readRaw();
     const line = `${JSON.stringify(proof)}\n`;
-    await writeFile(this.filePath, current + line, 'utf8');
+
+    const release = this.mutex;
+    let resolveNext: () => void = () => undefined;
+    this.mutex = new Promise<void>((resolve) => {
+      resolveNext = resolve;
+    });
+
+    try {
+      await release;
+      await mkdir(dirname(this.filePath), { recursive: true });
+      await writeFile(this.filePath, line, { encoding: 'utf8', flag: 'a' });
+    } finally {
+      resolveNext();
+    }
   }
 
   async list(): Promise<SampleProof[]> {

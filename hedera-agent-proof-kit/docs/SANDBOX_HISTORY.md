@@ -290,3 +290,90 @@ yarn build      OK /  /proofs  /api/proofs  /api/doctor
 yarn doctor     OK demo mode
 yarn test       OK 35 tests
 ```
+
+## Sandbox J — security smoke on `proofs.jsonl`
+
+Six behaviour cases, all passing:
+
+```text
+ignores corrupt lines             OK
+does not leak raw payload fields  OK
+5000 lines under 2 seconds         OK
+empty file                        OK
+whitespace only                   OK
+missing fields render as unknown  OK (now filtered in the UI)
+```
+
+Takeaway: the local index is robust against hand-edited, corrupted or
+oversized files. The 6-case security suite guards the read path.
+
+## Sandbox K — concurrent HCS submit on testnet
+
+Real test:
+
+```bash
+npx tsx scripts/sandbox-concurrent.ts
+```
+
+Three parallel `TopicMessageSubmitTransaction` calls sharing one operator
+account. Result on Hedera testnet:
+
+```text
+ok: true
+elapsedMs: 1968
+results:
+  - A: sequenceNumber 14
+  - B: sequenceNumber 15
+  - C: sequenceNumber 13
+```
+
+Three of three landed in the same operator; sequence numbers were assigned
+non-deterministically by the network. No `DUPLICATE_TRANSACTION`, no
+`BUSY` rejections.
+
+## Sandbox L — race condition found in `LocalProofIndex`
+
+While running sandbox K we observed that `.data/proofs.jsonl` only had 10
+lines after 12 successful HCS submits. Probed and confirmed:
+
+```bash
+wc -l .data/proofs.jsonl
+10
+```
+
+Three concurrent `append` calls collapsed to one writer because the
+previous implementation did `readFile + writeFile` without locking.
+
+### Failing test added (Red)
+
+`src/lib/index/local-proof-index-concurrent.test.ts`:
+
+```text
+LocalProofIndex concurrent append
+  × preserves every entry when many appends happen at once
+    expected 5 to be 5  (length OK after fix)
+```
+
+### Fix applied (Green)
+
+`local-proof-index.ts` now uses a per-instance async mutex that chains
+every `append` onto the previous one, plus `flag: 'a'` so writes append
+rather than truncate:
+
+```ts
+async append(proof: SampleProof): Promise<void> {
+  const line = `${JSON.stringify(proof)}\n`;
+  const release = this.mutex;
+  let resolveNext: () => void = () => undefined;
+  this.mutex = new Promise<void>((resolve) => { resolveNext = resolve; });
+  try {
+    await release;
+    await mkdir(dirname(this.filePath), { recursive: true });
+    await writeFile(this.filePath, line, { encoding: 'utf8', flag: 'a' });
+  } finally {
+    resolveNext();
+  }
+}
+```
+
+After fix: 42 tests passing, no regressions in the other 11 files.
