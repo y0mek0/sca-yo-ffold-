@@ -48,6 +48,30 @@ npm run watch:github-release   # Optional: pull a real GitHub release, hash it, 
 
 Open <http://localhost:3000/proofs> to see the local proof index, or fetch it as JSON at <http://localhost:3000/api/proofs?kind=research_claim&limit=25>.
 
+The Mirror Node verify script accepts `--hash` and `--sequence`:
+
+```bash
+npm run mirror:verify -- --hash b822a0ff345e06eb5db1ea9cb37d6f322e91d78e6796779756dd2176ba0a7bda
+npm run mirror:verify -- --hash <digest> --sequence <N>
+```
+
+It returns `ok: true` with `reason: mirror_hash_match` when the on-chain digest matches. The digest must be 64 hex characters; anything else is rejected with a clear error.
+
+## Local developer ergonomics
+
+```bash
+npm run doctor                 # Validates Node, .env.local, key shape, token association, proof count.
+npm run add:adapter -- --name <snake_case> --kind <ai_decision|research_claim|document_hash>
+```
+
+The Doctor now reports the size of the local proof index so you can tell at a glance how many receipts have already been anchored:
+
+```text
+ OK  Local proof index        12 proofs on file (10 research_claim, 2 ai_decision)
+```
+
+The `add:adapter` command scaffolds a new adapter file under `packages/nextjs/src/lib/adapters/` with the correct imports, naming, and `TODO` markers. Fill them in, add a vitest file, and you can wire the adapter into a script or API route.
+
 ## Core+ working adapters
 
 1. **Research Claim Proof** — claim + sources + evidence summary become a verifiable off-chain event. Use it for research agents, due-diligence bots, fact-check pipelines.
