@@ -501,3 +501,69 @@ rag-memory        sandbox sample
 hb price watcher  sequences 19, 21, 23, 25, 27
 issues watcher    sequences 20, 22, 24, 26, 28
 ```
+
+## Sandbox J — Payment Intent + real HBAR transfer
+
+Goal: prove the complete payment workflow: anchor the agent's intent, execute
+an actual HBAR transfer on Hedera testnet, anchor the execution result, and
+verify both HCS proofs plus the transfer through Mirror Node.
+
+Command:
+
+```bash
+npx tsx packages/nextjs/scripts/payment-intent-hbar.ts --amount-tinybar 1 --receiver 0.0.98
+```
+
+The script used the existing local Hedera testnet operator configuration. No
+private key was printed or added to the repository.
+
+Real result:
+
+```text
+payer:         0.0.10380366
+receiver:      0.0.98
+asset:         HBAR
+amount:        1 tinybar
+transfer:      SUCCESS
+intent HCS:    sequence 29
+execution HCS: sequence 30
+```
+
+The Hedera transaction was independently read from Mirror Node:
+
+```text
+transaction: 0.0.10380366-1790799829-866957034
+result:      SUCCESS
+transfer:    0.0.10380366 -> 0.0.98, 1 tinybar
+```
+
+Mirror proof checks:
+
+```text
+sequence 29 → mirror_hash_match
+sequence 30 → mirror_hash_match
+```
+
+The execution event links back to the intent SHA-256 digest. This distinguishes
+what the agent intended from what Hedera actually executed.
+
+Implementation:
+
+- `src/lib/adapters/payment-intent-execution.ts` — validates successful
+  execution and links it to the intent digest.
+- `scripts/payment-intent-hbar.ts` — intent proof, `TransferTransaction`,
+  receipt, execution proof, and local index writes.
+- `payment-intent-execution.test.ts` — success and rejected-status tests.
+
+No new API access is required. The flow uses the existing Hedera testnet
+operator credentials in `.env.local`.
+
+## Verification after Payment Intent work
+
+```text
+lint        ✓
+typecheck   ✓
+test        ✓ 28 files, 82 tests
+build       ✓
+doctor      ✓
+```

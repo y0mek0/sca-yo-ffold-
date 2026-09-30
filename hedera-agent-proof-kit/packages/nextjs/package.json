@@ -17,6 +17,7 @@
     "watch:github-release": "tsx scripts/watch-github-release.ts",
     "watch:hbar-price": "tsx scripts/watch-hbar-price.ts",
     "watch:github-issues": "tsx scripts/watch-github-issues.ts",
+    "payment:intent:hbar": "tsx scripts/payment-intent-hbar.ts",
     "add:adapter": "tsx scripts/add-adapter.ts"
   },
   "dependencies": {

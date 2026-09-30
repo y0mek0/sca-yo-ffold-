@@ -19,7 +19,7 @@ payload -> normalize -> hash -> HCS -> local index -> Mirror Node verify
 | Core | HCS proof log, local JSONL index, Mirror Node verification, Hedera setup Doctor, demo mode | `src/lib/proof`, `src/lib/index`, `src/lib/doctor`, `scripts/doctor.ts` |
 | Core+ working | Research Claim, AI Decision, Document/Office adapters with tests | `src/lib/adapters/research-claim.ts`, `ai-decision.ts`, `document-office.ts` |
 | Core+ roadmap factories | Browser Action, Payment Intent, Watcher Signal, RAG Memory typed factories | `src/lib/adapters/roadmap.ts` |
-| Real roadmap integration | GitHub release watcher, GitHub issues watcher, HBAR price watcher (CoinGecko) — all on real public APIs without keys, real testnet sequences | `src/lib/adapters/http-fetcher.ts`, `release-watcher.ts`, `github-issues-fetcher.ts`, `coingecko-fetcher.ts`, `price-watcher.ts`, `scripts/watch-*.ts` |
+| Real integrations | GitHub release watcher, GitHub issues watcher, HBAR price watcher (CoinGecko), and Payment Intent + real HBAR transfer — real testnet sequences | `src/lib/adapters/http-fetcher.ts`, `release-watcher.ts`, `github-issues-fetcher.ts`, `coingecko-fetcher.ts`, `price-watcher.ts`, `payment-intent-execution.ts`, `scripts/watch-*.ts`, `scripts/payment-intent-hbar.ts` |
 | UI | Hero dashboard, proof index with kind filter, JSON APIs, colorised CLI output | `src/app/page.tsx`, `proofs/page.tsx`, `api/proofs`, `src/lib/cli/cli-output.ts` |
 | CI | GitHub Actions pipeline with `lint / typecheck / test / build / doctor / audit / verify` | `.github/workflows/ci.yml` |
 | Docs | `README.md`, `AGENTS.md`, `docs/SANDBOX_HISTORY.md` (12 sandboxes, real testnet evidence) | repo root |
@@ -46,6 +46,7 @@ npm run mirror:verify          # Read the HCS topic through the Mirror Node and 
 npm run watch:github-release   # Optional: pull a real GitHub release, hash it, submit, verify.
 npm run watch:hbar-price       # Optional: pull live HBAR/USD from CoinGecko, hash it, submit, verify.
 npm run watch:github-issues    # Optional: pull latest open issues for any public GitHub repo, hash them, submit, verify.
+npm run payment:intent:hbar   # Submit intent, execute a real HBAR transfer, anchor execution proof.
 ```
 
 All three watchers call **public, unauthenticated** APIs (GitHub REST and CoinGecko `simple/price`), so they run end-to-end without any keys or tokens.
@@ -97,6 +98,29 @@ The strongest crypto users are:
 - **Crypto risk manager / market operations** — record market signals and risk decisions around trading; AgentProof does not execute trades.
 
 Important boundary: a proof shows what was recorded and when. It does not prove that an external claim was true, that an AI decision was correct, or that a trade was profitable. The detailed personas and workflows should be expanded here as the template gains more integrations.
+
+## Payment Intent + HBAR transfer
+
+The payment adapter now has a real Hedera testnet flow:
+
+```text
+Payment Intent
+  → intent proof anchored to HCS
+  → HBAR TransferTransaction
+  → SUCCESS receipt and transaction ID
+  → execution proof anchored to HCS
+  → Mirror Node verification of both proofs and the transfer
+```
+
+Run it with the existing `.env.local` Hedera operator credentials:
+
+```bash
+npm run payment:intent:hbar -- --receiver 0.0.98 --amount-tinybar 1
+```
+
+The receiver defaults to `HEDERA_PAYMENT_RECEIVER_ID` or `0.0.98`; set an explicit receiver for your own integration. The operator key is read locally and is never printed or sent to the frontend.
+
+The execution proof contains the payer, receiver, amount in tinybar, Hedera transaction ID, `SUCCESS` status, and the SHA-256 digest of the earlier intent proof. The full payload remains off-chain; HCS receives the compact proof message.
 
 ## Core+ working adapters
 
