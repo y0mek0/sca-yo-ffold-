@@ -616,8 +616,10 @@ pair: SAUCE / HBAR
 pool contract: 0.0.1062795
 focused tests: 3 passed
 full suite: 30 files, 87 tests passed
+live HCS proof: sequence 40
+Mirror verification: hash confirmed
 ```
 
-The public API fetch and all local gates passed. The HCS/Mirror sandbox is intentionally
-not marked complete until it is run with the local Hedera operator configuration; no
-credentials are stored in this repository.
+SaucerSwap sequence `40` uses the same HCS topic as the existing proof history. The
+public pool data was normalized locally; the HCS message contains the digest and
+minimal metadata, not the raw API response.

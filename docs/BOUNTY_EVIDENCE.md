@@ -30,10 +30,16 @@ Payment intent          sequence 35
 Payment transfer        SUCCESS
 Payment execution       sequence 36
 Concurrent HCS writes  sequences 37, 38, 39
-SaucerSwap snapshot       pending local HCS credentials
+SaucerSwap snapshot       sequence 40
 ```
 
-The SaucerSwap adapter itself has passed a live public API fetch for pool `0` (`SAUCE / HBAR`, pool contract `0.0.1062795`) and 3 focused unit tests. The testnet sequence and Mirror verification must be added from a machine with the local Hedera operator configuration; no credential values are committed or requested in chat.
+The SaucerSwap adapter passed a live public API fetch for pool `0` (`SAUCE / HBAR`, pool contract `0.0.1062795`), anchored the normalized proof to HCS sequence `40`, and was confirmed by Mirror Node with a matching SHA-256 digest:
+
+```text
+sequence: 40
+hash: 58478f383c6cd3b3f501f2740c7b120dbad48dfbaf8a9f11305443de98de394c
+mirror: confirmed hash
+```
 
 Mirror Node confirmed the hashes for sequences 31 through 36. The payment workflow
 is intentionally HBAR-only:
