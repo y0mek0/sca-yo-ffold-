@@ -1,0 +1,32 @@
+{
+  "name": "@agentproof/nextjs",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "doctor": "tsx scripts/doctor.ts",
+    "audit:sample": "tsx scripts/audit-sample.ts",
+    "verify:sample": "tsx scripts/verify-sample.ts"
+  },
+  "dependencies": {
+    "@hashgraph/sdk": "^2.81.0",
+    "next": "^16.3.7",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tsx": "^4.20.6"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.3",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "eslint": "9.39.5",
+    "eslint-config-next": "^16.3.7",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.2"
+  }
+}

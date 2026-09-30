@@ -1,0 +1,66 @@
+{
+  "name": "AgentProof HBAR",
+  "description": "Scaffold-HBAR template for verifiable AI, research, and document workflows using HCS proof logs and Mirror Node verification.",
+  "version": "0.1.0",
+  "create-scaffold-hbar": {
+    "requirements": {
+      "node": ">=20.18.3"
+    },
+    "capabilities": {
+      "frontend": ["nextjs-app"],
+      "solidityFramework": ["none"],
+      "packageManager": ["npm"]
+    },
+    "defaults": {
+      "frontend": "nextjs-app",
+      "solidityFramework": "none",
+      "packageManager": "npm"
+    },
+    "envVars": [
+      {
+        "key": "HEDERA_NETWORK",
+        "description": "Hedera network target. Use testnet for the bounty proof."
+      },
+      {
+        "key": "HEDERA_OPERATOR_ID",
+        "description": "Server-side Hedera testnet account ID used to submit HCS proof messages."
+      },
+      {
+        "key": "HEDERA_OPERATOR_KEY",
+        "description": "Server-side Hedera key. 0x ECDSA keys are parsed with fromStringECDSA."
+      },
+      {
+        "key": "HEDERA_HCS_TOPIC_ID",
+        "description": "Optional existing HCS topic ID for proof messages."
+      },
+      {
+        "key": "HEDERA_MIRROR_NODE_URL",
+        "description": "Optional Mirror Node URL override."
+      }
+    ],
+    "outro": {
+      "sections": [
+        {
+          "title": "AgentProof HBAR next steps",
+          "steps": [
+            {
+              "label": "Copy env placeholders",
+              "command": "cp .env.example .env.local"
+            },
+            {
+              "label": "Run the Hedera setup doctor",
+              "command": "{run:doctor}"
+            },
+            {
+              "label": "Start the proof UI",
+              "command": "{run:dev}"
+            },
+            {
+              "text": "Use demo mode without credentials, or add a funded Hedera testnet account to anchor real HCS proofs."
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

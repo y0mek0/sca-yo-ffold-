@@ -1,0 +1,23 @@
+{
+  "name": "hedera-agent-proof-kit",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Scaffold-HBAR template for verifiable AI, research, and document workflows on Hedera HCS.",
+  "license": "MIT",
+  "workspaces": [
+    "packages/nextjs"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w packages/nextjs",
+    "build": "npm run build -w packages/nextjs",
+    "lint": "npm run lint -w packages/nextjs",
+    "typecheck": "npm run typecheck -w packages/nextjs",
+    "test": "npm run test -w packages/nextjs",
+    "doctor": "npm run doctor -w packages/nextjs",
+    "audit:sample": "npm run audit:sample -w packages/nextjs",
+    "verify:sample": "npm run verify:sample -w packages/nextjs"
+  },
+  "engines": {
+    "node": ">=20.18.3"
+  }
+}
