@@ -100,3 +100,5 @@ hashscan topic:   https://hashscan.io/testnet/topic/0.0.10426202
 
 The first real submission in this repo published proof sequence 10 to the topic above (a custom price-alert adapter built on top of `createWatcherSignalProofEvent`), and `npm run mirror:verify` against the topic reports `ok: true` with `reason: mirror_hash_match` for that hash.
 
+For a detailed log of the four real sandbox exercises (clean install, real `.env.local` round-trip, custom adapter end-to-end, broken env detection) see `docs/SANDBOX_HISTORY.md`.
+
