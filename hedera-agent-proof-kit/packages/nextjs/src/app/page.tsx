@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 const adapters = [
   ['Research Claim Proof', 'Hash a claim and its evidence bundle, then anchor the proof to HCS.'],
   ['AI Decision Proof', 'Record an agent decision before it can be rewritten.'],
@@ -14,6 +16,9 @@ export default function HomePage() {
           A Hedera proof layer for AI, research, and document workflows: normalize payloads,
           hash them, anchor the proof to HCS, and verify through Mirror Node.
         </p>
+        <div className="actions">
+          <Link href="/proofs">View proof index</Link>
+        </div>
         <div className="grid">
           {adapters.map(([title, text]) => (
             <article className="card" key={title}>

@@ -53,6 +53,8 @@ npm run hcs:submit       # Submit the proof message to the HCS topic.
 npm run mirror:verify    # Read the HCS topic through the Mirror Node and confirm the hash.
 ```
 
+Open <http://localhost:3000/proofs> to see the local proof index, or fetch it as JSON at <http://localhost:3000/api/proofs>.
+
 ## Stage 2 local proof commands
 
 Create a deterministic local proof sample:

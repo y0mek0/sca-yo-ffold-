@@ -60,6 +60,52 @@ p {
   margin-top: 24px;
 }
 
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.proof-list {
+  list-style: none;
+  padding: 0;
+  margin: 24px 0 0;
+  display: grid;
+  gap: 12px;
+}
+
+.proof-list .card {
+  margin: 0;
+}
+
+.proof-list code,
+.card code {
+  color: var(--accent);
+}
+
+.hash {
+  font-size: 12px;
+  word-break: break-all;
+  color: var(--muted);
+}
+
+button {
+  appearance: none;
+  background: var(--accent);
+  color: #0b0d08;
+  border: none;
+  padding: 12px 18px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
 .card {
   border: 1px solid var(--line);
   padding: 16px;
