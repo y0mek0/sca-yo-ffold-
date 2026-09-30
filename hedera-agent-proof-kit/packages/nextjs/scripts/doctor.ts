@@ -2,7 +2,9 @@ import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { formatCheck, formatHeadline, formatHint } from '../src/lib/cli/cli-output';
 import { describeHederaKey, parseHederaAccountId } from '../src/lib/doctor/key-parser';
+import { buildProofCount, formatProofCount } from '../src/lib/doctor/proof-count';
 import { checkTokenAssociation } from '../src/lib/doctor/token-association';
+import { readLocalProofs } from '../src/lib/index/read-local-proofs';
 import { isVersionAtLeast } from '../src/lib/doctor/version';
 
 function loadDotEnvLocal(): void {
@@ -102,6 +104,10 @@ async function main(): Promise<void> {
       result.ok ? `${tokenId} associated` : result.reason
     ]);
   }
+
+  const proofs = await readLocalProofs(join(process.cwd(), '.data', 'proofs.jsonl'));
+  const proofCount = buildProofCount(proofs);
+  checks.push(['Local proof index', true, formatProofCount(proofCount)]);
 
   console.log(formatHeadline('AgentProof HBAR Doctor', { color }));
   console.log();

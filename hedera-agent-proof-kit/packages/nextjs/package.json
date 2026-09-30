@@ -14,7 +14,8 @@
     "verify:sample": "tsx scripts/verify-sample.ts",
     "hcs:submit": "tsx scripts/hcs-submit-sample.ts",
     "mirror:verify": "tsx scripts/mirror-verify-sample.ts",
-    "watch:github-release": "tsx scripts/watch-github-release.ts"
+    "watch:github-release": "tsx scripts/watch-github-release.ts",
+    "add:adapter": "tsx scripts/add-adapter.ts"
   },
   "dependencies": {
     "@hashgraph/sdk": "^2.81.0",
