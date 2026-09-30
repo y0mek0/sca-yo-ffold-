@@ -20,6 +20,7 @@
     "mirror:verify": "npm run mirror:verify -w packages/nextjs --",
     "watch:github-release": "npm run watch:github-release -w packages/nextjs --",
     "watch:hbar-price": "npm run watch:hbar-price -w packages/nextjs --",
+    "watch:saucerswap": "npm run watch:saucerswap -w packages/nextjs --",
     "watch:github-issues": "npm run watch:github-issues -w packages/nextjs --",
     "payment:intent:hbar": "npm run payment:intent:hbar -w packages/nextjs --",
     "add:adapter": "npm run add:adapter -w packages/nextjs --"

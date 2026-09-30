@@ -9,12 +9,13 @@ map, not a claim that a proof hash makes an external claim true.
 |---|---|
 | External `create-scaffold-hbar` template | `npm create scaffold-hbar@latest -- agentproof-smoke --template y0mek0/sca-yo-ffold- --frontend nextjs-app --solidity-framework none --package-manager npm --network testnet --ci --skip-hedera-skills --skip-install` |
 | Fresh install | `npm install --no-audit --no-fund` in a disposable generated project |
-| Fresh quality gates | `lint`, `typecheck`, `test`, `build`, and `doctor` all passed; 29 test files / 84 tests |
+| Fresh quality gates | `lint`, `typecheck`, `test`, `build`, and `doctor` all passed; 30 test files / 87 tests |
 | Required template files | `template.json`, `README.md`, `AGENTS.md`, and `LICENSE` are at repository root |
 | No committed secrets | `.env*` is ignored except `.env.example`; credentials stayed local |
 | Demo without credentials | Fresh `doctor` reports demo mode and zero local proofs without failing |
 | Hedera usage | HCS proof messages and a real HBAR `TransferTransaction` on Hedera testnet |
 | Independent verification | Mirror Node hash checks and transfer lookup passed |
+| SaucerSwap adapter | Public `GET https://api.saucerswap.finance/pools/<pool-id>` is normalized into a `market_snapshot` proof; adapter tests pass; live HCS evidence is recorded below when credentials are available |
 
 ## Live testnet evidence
 
@@ -29,7 +30,10 @@ Payment intent          sequence 35
 Payment transfer        SUCCESS
 Payment execution       sequence 36
 Concurrent HCS writes  sequences 37, 38, 39
+SaucerSwap snapshot       pending local HCS credentials
 ```
+
+The SaucerSwap adapter itself has passed a live public API fetch for pool `0` (`SAUCE / HBAR`, pool contract `0.0.1062795`) and 3 focused unit tests. The testnet sequence and Mirror verification must be added from a machine with the local Hedera operator configuration; no credential values are committed or requested in chat.
 
 Mirror Node confirmed the hashes for sequences 31 through 36. The payment workflow
 is intentionally HBAR-only:

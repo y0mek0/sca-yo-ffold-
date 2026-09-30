@@ -604,3 +604,20 @@ test        ✓ 28 files, 82 tests
 build       ✓
 doctor      ✓
 ```
+
+## SaucerSwap adapter implementation check
+
+The read-only SaucerSwap adapter was added without trading or wallet signing:
+
+```text
+public endpoint: GET https://api.saucerswap.finance/pools/<pool-id>
+validated live pool: 0
+pair: SAUCE / HBAR
+pool contract: 0.0.1062795
+focused tests: 3 passed
+full suite: 30 files, 87 tests passed
+```
+
+The public API fetch and all local gates passed. The HCS/Mirror sandbox is intentionally
+not marked complete until it is run with the local Hedera operator configuration; no
+credentials are stored in this repository.

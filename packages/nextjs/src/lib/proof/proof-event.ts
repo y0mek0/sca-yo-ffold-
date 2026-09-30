@@ -9,7 +9,7 @@ export type ProofActor = {
 
 export type ProofSubject = {
   id: string;
-  type: 'claim' | 'decision' | 'document' | 'payment_intent' | 'browser_action' | 'watcher_signal' | 'rag_memory' | 'agent_evaluation';
+  type: 'claim' | 'decision' | 'document' | 'payment_intent' | 'browser_action' | 'watcher_signal' | 'rag_memory' | 'agent_evaluation' | 'market_snapshot';
 };
 
 export type JsonPrimitive = string | number | boolean | null;

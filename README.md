@@ -1,6 +1,6 @@
 # AgentProof HBAR
 
-A `scaffold-hbar` template for verifiable AI, research, and document workflows on Hedera Consensus Service.
+A Hedera-native proof layer for AI decisions, research, payments, and verifiable ecosystem data.
 
 AgentProof hashes important outputs, anchors the proof to HCS, stores the full payload off-chain in a local JSONL index, and verifies it through the Hedera Mirror Node. The template ships with a setup Doctor, three working Core+ adapters, four roadmap adapters as typed factories, a polished proof-index UI, and a GitHub release watcher that proves real HTTP → HCS → Mirror Node round-trips end to end.
 
@@ -19,7 +19,7 @@ payload -> normalize -> hash -> HCS -> local index -> Mirror Node verify
 | Core | HCS proof log, local JSONL index, Mirror Node verification, Hedera setup Doctor, demo mode | `src/lib/proof`, `src/lib/index`, `src/lib/doctor`, `scripts/doctor.ts` |
 | Core+ working | Research Claim, AI Decision, Document/Office adapters with tests | `src/lib/adapters/research-claim.ts`, `ai-decision.ts`, `document-office.ts` |
 | Core+ roadmap factories | Browser Action, Payment Intent, Watcher Signal, RAG Memory typed factories | `src/lib/adapters/roadmap.ts` |
-| Real integrations | GitHub release watcher, GitHub issues watcher, HBAR price watcher (CoinGecko), and Payment Intent + real HBAR transfer — real testnet sequences | `src/lib/adapters/http-fetcher.ts`, `release-watcher.ts`, `github-issues-fetcher.ts`, `coingecko-fetcher.ts`, `price-watcher.ts`, `payment-intent-execution.ts`, `scripts/watch-*.ts`, `scripts/payment-intent-hbar.ts` |
+| Real integrations | GitHub release watcher, GitHub issues watcher, HBAR price watcher (CoinGecko), SaucerSwap read-only pool snapshot, and Payment Intent + real HBAR transfer — real testnet sequences | `src/lib/adapters/http-fetcher.ts`, `release-watcher.ts`, `github-issues-fetcher.ts`, `coingecko-fetcher.ts`, `price-watcher.ts`, `saucerswap-snapshot.ts`, `payment-intent-execution.ts`, `scripts/watch-*.ts`, `scripts/payment-intent-hbar.ts` |
 | UI | Hero dashboard, proof index with kind filter, JSON APIs, colorised CLI output | `src/app/page.tsx`, `proofs/page.tsx`, `api/proofs`, `src/lib/cli/cli-output.ts` |
 | CI | GitHub Actions pipeline with `lint / typecheck / test / build / doctor / audit / verify` | `.github/workflows/ci.yml` |
 | Docs | `README.md`, `AGENTS.md`, `docs/SANDBOX_HISTORY.md` (12 sandboxes, real testnet evidence) | repo root |
@@ -45,11 +45,22 @@ npm run hcs:submit             # Submit the proof message to the HCS topic.
 npm run mirror:verify          # Read the HCS topic through the Mirror Node and confirm the hash.
 npm run watch:github-release   # Optional: pull a real GitHub release, hash it, submit, verify.
 npm run watch:hbar-price       # Optional: pull live HBAR/USD from CoinGecko, hash it, submit, verify.
+npm run watch:saucerswap       # Optional: pull a public SaucerSwap pool snapshot, hash it, submit, verify.
 npm run watch:github-issues    # Optional: pull latest open issues for any public GitHub repo, hash them, submit, verify.
 npm run payment:intent:hbar   # Submit intent, execute a real HBAR transfer, anchor execution proof.
 ```
 
-All three watchers call **public, unauthenticated** APIs (GitHub REST and CoinGecko `simple/price`), so they run end-to-end without any keys or tokens.
+All four watchers call **public, unauthenticated** APIs (GitHub REST, CoinGecko `simple/price`, and SaucerSwap pool API), so they run end-to-end without any keys or tokens.
+
+### SaucerSwap read-only snapshot
+
+The SaucerSwap adapter reads `GET https://api.saucerswap.finance/pools/<pool-id>` and creates a canonical market snapshot for a Hedera pool. It never signs, trades, or sends funds. The normalized snapshot contains the pool contract ID, token IDs, symbols, decimals, USD prices, reserves, and fetch time. The full event stays in the local proof index; HCS receives only its SHA-256 digest and minimal metadata.
+
+```bash
+npm run watch:saucerswap -- --pool-id 0
+```
+
+This makes the integration load-bearing for a market-research workflow: an agent can prove which public SaucerSwap state it observed before making a research claim or risk decision. A proof records what was observed and when; it does not claim that the market data was true or that a trade was profitable.
 
 Open <http://localhost:3000/proofs> to see the local proof index, or fetch it as JSON at <http://localhost:3000/api/proofs?kind=research_claim&limit=25>.
 
