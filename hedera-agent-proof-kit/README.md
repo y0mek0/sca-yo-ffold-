@@ -37,11 +37,21 @@ Core includes:
 ```bash
 npm install
 cp .env.example .env.local
+# Fill HEDERA_OPERATOR_ID, HEDERA_OPERATOR_KEY, and HEDERA_TOPIC_ID.
 npm run doctor
 npm run dev
 ```
 
 Open <http://localhost:3000>.
+
+## Real testnet proof flow
+
+```bash
+npm run audit:sample     # Build a deterministic off-chain event + HCS-safe proof message.
+npm run verify:sample    # Recompute the local hash and confirm the HCS message matches.
+npm run hcs:submit       # Submit the proof message to the HCS topic.
+npm run mirror:verify    # Read the HCS topic through the Mirror Node and confirm the hash.
+```
 
 ## Stage 2 local proof commands
 
@@ -57,7 +67,7 @@ Verify the local proof by recomputing the off-chain event hash and comparing it 
 npm run verify:sample
 ```
 
-These commands are local-only for now. Stage 4 replaces the sample HCS message with a real Mirror Node-read HCS message.
+These commands are local-only for now. They run without any operator credentials and never touch Hedera.
 
 ## Important pattern
 
@@ -75,4 +85,14 @@ minimal metadata
 
 ## Bounty evidence
 
-Add the final testnet topic, sequence number, Mirror Node URL, and Hashscan URL here after the first real proof is submitted.
+```text
+network:          Hedera testnet
+topic:            0.0.10426202
+mirror node url:  https://testnet.mirrornode.hedera.com
+sample proof:     research_claim
+sample hash:      b822a0ff345e06eb5db1ea9cb37d6f322e91d78e6796779756dd2176ba0a7bda
+hashscan topic:   https://hashscan.io/testnet/topic/0.0.10426202
+```
+
+The first real submission in this repo published proof sequence 6 to the topic above, and `npm run mirror:verify` reports `ok: true` with `reason: mirror_hash_match` for that hash.
+

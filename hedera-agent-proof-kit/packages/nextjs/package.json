@@ -11,7 +11,9 @@
     "test": "vitest run",
     "doctor": "tsx scripts/doctor.ts",
     "audit:sample": "tsx scripts/audit-sample.ts",
-    "verify:sample": "tsx scripts/verify-sample.ts"
+    "verify:sample": "tsx scripts/verify-sample.ts",
+    "hcs:submit": "tsx scripts/hcs-submit-sample.ts",
+    "mirror:verify": "tsx scripts/mirror-verify-sample.ts"
   },
   "dependencies": {
     "@hashgraph/sdk": "^2.81.0",

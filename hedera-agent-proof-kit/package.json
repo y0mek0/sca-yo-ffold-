@@ -15,7 +15,9 @@
     "test": "npm run test -w packages/nextjs",
     "doctor": "npm run doctor -w packages/nextjs",
     "audit:sample": "npm run audit:sample -w packages/nextjs",
-    "verify:sample": "npm run verify:sample -w packages/nextjs"
+    "verify:sample": "npm run verify:sample -w packages/nextjs",
+    "hcs:submit": "npm run hcs:submit -w packages/nextjs",
+    "mirror:verify": "npm run mirror:verify -w packages/nextjs"
   },
   "engines": {
     "node": ">=20.18.3"
