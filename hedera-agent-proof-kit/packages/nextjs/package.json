@@ -15,6 +15,8 @@
     "hcs:submit": "tsx scripts/hcs-submit-sample.ts",
     "mirror:verify": "tsx scripts/mirror-verify-sample.ts",
     "watch:github-release": "tsx scripts/watch-github-release.ts",
+    "watch:hbar-price": "tsx scripts/watch-hbar-price.ts",
+    "watch:github-issues": "tsx scripts/watch-github-issues.ts",
     "add:adapter": "tsx scripts/add-adapter.ts"
   },
   "dependencies": {
