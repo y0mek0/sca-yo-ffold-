@@ -21,5 +21,12 @@
   },
   "engines": {
     "node": ">=20.18.3"
+  },
+  "overrides": {
+    "eslint": "9.39.5",
+    "typescript-eslint": {
+      "@typescript-eslint/parser": "^8.46.0",
+      "@typescript-eslint/eslint-plugin": "^8.46.0"
+    }
   }
 }
