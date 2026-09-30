@@ -20,9 +20,17 @@ Core includes:
 
 ## Core+ working adapters
 
-1. Research Claim Proof
-2. AI Decision Proof
-3. Document / Office Proof
+1. Research Claim Proof — claim + sources + evidence summary become a verifiable off-chain event.
+2. AI Decision Proof — agent decision + rationale + confidence become an auditable decision proof.
+3. Document / Office Proof — file metadata + SHA-256 digest prove a document version without storing bytes.
+
+## Roadmap adapters
+
+- Browser Action Proof — URL/action/result/screenshot hash for browser agents.
+- Payment Intent Proof — payer/receiver/asset/amount/policy before a payment is signed.
+- Watcher / Radar Proof — wallet, market, GitHub, or news signal proofs.
+- RAG / Memory Proof — question, answer, and retrieved chunks hash.
+- Agent Evaluation Proof — eval score, failed checks, and report hash.
 
 ## Quickstart
 

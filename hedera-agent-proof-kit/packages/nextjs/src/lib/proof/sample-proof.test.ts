@@ -11,4 +11,10 @@ describe('buildSampleProof', () => {
     expect(JSON.stringify(sample.hcsMessage)).not.toContain('sources');
     expect(JSON.stringify(sample.event)).toContain('sources');
   });
+
+  it('builds samples for all working Core+ adapters', () => {
+    expect(buildSampleProof('research_claim').event.metadata).toMatchObject({ adapter: 'research-claim' });
+    expect(buildSampleProof('ai_decision').event.metadata).toMatchObject({ adapter: 'ai-decision' });
+    expect(buildSampleProof('document_hash').event.metadata).toMatchObject({ adapter: 'document-office' });
+  });
 });
