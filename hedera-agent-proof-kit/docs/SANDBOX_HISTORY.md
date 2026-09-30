@@ -203,3 +203,90 @@ Public repo:
 ```text
 https://github.com/y0mek0/sca-yo-ffold-
 ```
+
+## Sandbox G — token association check via Mirror Node
+
+Goal: prove the doctor catches missing token associations before the user
+pays for it with `TOKEN_NOT_ASSOCIATED_TO_ACCOUNT` on chain.
+
+Setup: real `.env.local` with operator `0.0.10380366`, default token
+`0.0.429274` (USDC testnet).
+
+Result:
+
+```text
+AgentProof HBAR Doctor
+OK  Node version             v24.11.1 >= 20.18.3
+OK  HEDERA_NETWORK           testnet
+OK  HEDERA_OPERATOR_ID       set
+OK  HEDERA_OPERATOR_ID shape parsed 0.0.10380366
+OK  HEDERA_OPERATOR_KEY      set
+OK  Key format               ecdsa-hex (b215a676a83c...)
+OK  HEDERA_MIRROR_NODE_URL   https://testnet.mirrornode.hedera.com
+OK  Token association        0.0.429274 associated
+```
+
+Takeaway: real Mirror Node query confirms the USDC testnet association.
+
+## Sandbox H — negative HCS submit cases
+
+Goal: prove `hcs:submit` returns structured JSON errors instead of crashing.
+
+Wrong topic:
+
+```json
+{
+  "ok": false,
+  "error": { "kind": "topic", "reason": "invalid_topic_id" }
+}
+```
+
+Wrong operator:
+
+```json
+{
+  "ok": false,
+  "error": { "kind": "operator", "reason": "payer_account_not_found" }
+}
+```
+
+Takeaway: `classifyHcsError` maps SDK strings to typed reason codes.
+
+## Sandbox E — browser-action end-to-end
+
+```text
+sequenceNumber: 11
+hash:           d71caeb81452ccd9fd4f38b3395d849a48592e3f598057245fd92a81449cb4c7
+```
+
+## Sandbox F — rag-memory end-to-end
+
+```text
+sequenceNumber: 12
+hash:           c6dc18f50a50cddad1b606e85b95b16cee94fcc905db953493b85d5e40df8588
+```
+
+## Sandbox I — create-scaffold-hbar real run
+
+Two real bugs found and fixed during this sandbox:
+
+1. `Failed to download .../tarball/main: 404`. The default branch was `master`,
+   `create-scaffold-hbar` downloads `tarball/main`. Renamed `master → main`
+   and updated default_branch on GitHub.
+
+2. `yarn install` failed with `Cannot find package 'vite'`. Yarn v4 in
+   workspaces skipped the optional vite peer. Added `overrides` block to
+   pin eslint to 9.39.5 and dropped the optional `vite` peer declaration.
+
+End result:
+
+```text
+✔ Create project directory
+✔ Creating a new Scaffold-HBAR app in myagentproof
+✔ Initializing Git repository
+
+yarn install    OK
+yarn build      OK /  /proofs  /api/proofs  /api/doctor
+yarn doctor     OK demo mode
+yarn test       OK 35 tests
+```
