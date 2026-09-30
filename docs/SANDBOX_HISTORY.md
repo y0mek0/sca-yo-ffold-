@@ -623,3 +623,20 @@ Mirror verification: hash confirmed
 SaucerSwap sequence `40` uses the same HCS topic as the existing proof history. The
 public pool data was normalized locally; the HCS message contains the digest and
 minimal metadata, not the raw API response.
+
+## HTS treasury snapshot implementation check
+
+The read-only HTS adapter fetched token metadata and treasury balance from the Hedera
+Mirror Node, then anchored the normalized event:
+
+```text
+token: 0.0.429274 (USDC)
+decimals: 6
+treasury: 0.0.5176
+treasury balance: 55699998
+HCS sequence: 41
+Mirror verification: hash confirmed
+```
+
+The HCS message contains the SHA-256 digest and minimal metadata. No token transfer,
+association, signing, or private key is performed by this adapter.

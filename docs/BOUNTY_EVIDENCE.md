@@ -31,6 +31,7 @@ Payment transfer        SUCCESS
 Payment execution       sequence 36
 Concurrent HCS writes  sequences 37, 38, 39
 SaucerSwap snapshot       sequence 40
+HTS treasury snapshot     sequence 41
 ```
 
 The SaucerSwap adapter passed a live public API fetch for pool `0` (`SAUCE / HBAR`, pool contract `0.0.1062795`), anchored the normalized proof to HCS sequence `40`, and was confirmed by Mirror Node with a matching SHA-256 digest:
@@ -38,6 +39,14 @@ The SaucerSwap adapter passed a live public API fetch for pool `0` (`SAUCE / HBA
 ```text
 sequence: 40
 hash: 58478f383c6cd3b3f501f2740c7b120dbad48dfbaf8a9f11305443de98de394c
+mirror: confirmed hash
+```
+
+The HTS treasury snapshot used token `0.0.429274` (`USDC`, 6 decimals), treasury `0.0.5176`, and was anchored as sequence `41`. Mirror Node confirmed the matching digest:
+
+```text
+sequence: 41
+hash: 66d6ba12c6b60a66e291c5d0a107ba0ab6802ed2842aad1fa24ca2f75739fdae
 mirror: confirmed hash
 ```
 
@@ -65,8 +74,9 @@ The project was prepared against the published bounty breakdown recorded in the
 submission notes:
 
 - **35 points — ecosystem integration and value:** reusable proof layer for research,
-  AI decisions, documents, releases, issues, market signals, and payments; real HCS
-  anchoring is load-bearing rather than decorative.
+  AI decisions, documents, releases, issues, market signals, payments, SaucerSwap
+  market snapshots, and HTS treasury state; real HCS anchoring is load-bearing rather
+  than decorative.
 - **30 points — documentation:** scaffold, install, demo mode, doctor, sample proof,
   Mirror verification, limitations, and sandbox history are documented.
 - **20 points — code quality:** TypeScript validation, focused adapter tests, full test
