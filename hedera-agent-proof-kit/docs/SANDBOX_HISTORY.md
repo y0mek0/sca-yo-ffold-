@@ -377,3 +377,127 @@ async append(proof: SampleProof): Promise<void> {
 ```
 
 After fix: 42 tests passing, no regressions in the other 11 files.
+
+## Sandbox H — HBAR price watcher (CoinGecko public API)
+
+Goal: prove that the template can fetch a real public price feed, hash it as
+a watcher-signal proof, and submit to HCS without needing any API key.
+
+Command:
+
+```bash
+npm run watch:hbar-price -- --threshold 0
+```
+
+Real CoinGecko response (`hedera-hashgraph` slug, USD):
+
+```text
+priceUsd:   0.108873
+fetchedAt:  2026-09-30T11:59:47.842Z
+```
+
+Submitted to HCS as sequence 19, then 21, 23, 25, 27 across the development
+session. Each call published a fresh SHA-256 digest of the
+`createPriceWatcherProofEvent` output.
+
+Built from scratch in this turn:
+
+- `src/lib/adapters/coingecko-fetcher.ts` — public CoinGecko
+  `simple/price` endpoint, no key, no rate-limit purchase needed for ad-hoc
+  fetching.
+- `src/lib/adapters/price-watcher.ts` — typed factory that validates
+  threshold vs current price and direction (`above` / `below`).
+- `scripts/watch-hbar-price.ts` — CLI entry; submits to HCS, appends to
+  `.data/proofs.jsonl`.
+- `src/lib/adapters/price-watcher-sandbox.ts` + test — analysis helper
+  `findHbarThresholds` over a history of submissions.
+
+Tests:
+
+```text
+coingecko-fetcher.test.ts      3 tests
+price-watcher.test.ts          2 tests
+price-watcher-sandbox.test.ts  2 tests
+```
+
+Mirrored price range observed across five submissions:
+
+```text
+count: 5
+min:   0.108595 USD
+max:   0.109236 USD
+latest 0.108702 USD (sequence 25)
+```
+
+API / access needed:
+
+```text
+CoinGecko public endpoint — no key.
+```
+
+## Sandbox I — GitHub issues watcher (public REST API)
+
+Goal: prove that the template can fetch public open issues for any
+GitHub repo, hash them as a watcher-signal proof, and submit to HCS
+without needing a Personal Access Token for smoke testing.
+
+Command:
+
+```bash
+npm run watch:github-issues -- --owner microsoft --repo typescript --limit 3
+```
+
+Real GitHub response (first three open issues):
+
+```text
+#64551 — tsc: default GOGC=400, SIMD-accelerated comment scanning, and Symbol compaction  PR  hazyhaar  2026-09-30T08:34:17Z
+#64550 — Fix references after unrelated project edits (#64497)                  PR  SHULMIT    2026-09-30T00:43:45Z
+#64549 — Content mappers: let registered extensions take part in extensionless module lookup  ISSUE  leonidaz  2026-09-30T00:35:27Z
+```
+
+Submitted to HCS as sequence 20, then 22, 24, 26, 28 across the
+development session.
+
+Built from scratch in this turn:
+
+- `src/lib/adapters/github-issues-fetcher.ts` — public REST endpoint
+  `/repos/{owner}/{repo}/issues?state=open&sort=created&direction=desc`.
+- `scripts/watch-github-issues.ts` — CLI entry; submits to HCS, appends to
+  `.data/proofs.jsonl`.
+- `src/lib/adapters/issues-watcher-sandbox.ts` + test — analysis helper
+  `summarizeIssuesBatches` over a history of submissions.
+
+Tests:
+
+```text
+github-issues-fetcher.test.ts     3 tests
+issues-watcher-sandbox.test.ts    2 tests
+```
+
+Across five watcher runs against `microsoft/typescript`:
+
+```text
+batchCount:       5
+totalIssuesSeen: 14
+perRepo:          microsoft/typescript -> 14
+latestBatch:      sequence 28, issueCount 3
+```
+
+API / access needed:
+
+```text
+GitHub public REST — no token for first 60 requests per hour.
+For production: set GITHUB_TOKEN env var to lift the limit to 5000/h.
+The fetch wrapper already accepts `fetchImpl` so a token-based call is a
+drop-in replacement.
+```
+
+## Combined testnet footprint after the watcher work
+
+```text
+release watcher   sequences 18
+browser-action    sandbox sample
+rag-memory        sandbox sample
+hb price watcher  sequences 19, 21, 23, 25, 27
+issues watcher    sequences 20, 22, 24, 26, 28
+```

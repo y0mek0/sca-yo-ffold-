@@ -19,7 +19,7 @@ payload -> normalize -> hash -> HCS -> local index -> Mirror Node verify
 | Core | HCS proof log, local JSONL index, Mirror Node verification, Hedera setup Doctor, demo mode | `src/lib/proof`, `src/lib/index`, `src/lib/doctor`, `scripts/doctor.ts` |
 | Core+ working | Research Claim, AI Decision, Document/Office adapters with tests | `src/lib/adapters/research-claim.ts`, `ai-decision.ts`, `document-office.ts` |
 | Core+ roadmap factories | Browser Action, Payment Intent, Watcher Signal, RAG Memory typed factories | `src/lib/adapters/roadmap.ts` |
-| Real roadmap integration | GitHub release watcher that pulls a real public release, hashes it, submits to HCS, verifies via Mirror Node | `src/lib/adapters/http-fetcher.ts`, `release-watcher.ts`, `scripts/watch-github-release.ts` |
+| Real roadmap integration | GitHub release watcher, GitHub issues watcher, HBAR price watcher (CoinGecko) — all on real public APIs without keys, real testnet sequences | `src/lib/adapters/http-fetcher.ts`, `release-watcher.ts`, `github-issues-fetcher.ts`, `coingecko-fetcher.ts`, `price-watcher.ts`, `scripts/watch-*.ts` |
 | UI | Hero dashboard, proof index with kind filter, JSON APIs, colorised CLI output | `src/app/page.tsx`, `proofs/page.tsx`, `api/proofs`, `src/lib/cli/cli-output.ts` |
 | CI | GitHub Actions pipeline with `lint / typecheck / test / build / doctor / audit / verify` | `.github/workflows/ci.yml` |
 | Docs | `README.md`, `AGENTS.md`, `docs/SANDBOX_HISTORY.md` (12 sandboxes, real testnet evidence) | repo root |
@@ -44,7 +44,11 @@ npm run verify:sample          # Recompute the local hash and confirm the HCS me
 npm run hcs:submit             # Submit the proof message to the HCS topic.
 npm run mirror:verify          # Read the HCS topic through the Mirror Node and confirm the hash.
 npm run watch:github-release   # Optional: pull a real GitHub release, hash it, submit, verify.
+npm run watch:hbar-price       # Optional: pull live HBAR/USD from CoinGecko, hash it, submit, verify.
+npm run watch:github-issues    # Optional: pull latest open issues for any public GitHub repo, hash them, submit, verify.
 ```
+
+All three watchers call **public, unauthenticated** APIs (GitHub REST and CoinGecko `simple/price`), so they run end-to-end without any keys or tokens.
 
 Open <http://localhost:3000/proofs> to see the local proof index, or fetch it as JSON at <http://localhost:3000/api/proofs?kind=research_claim&limit=25>.
 
@@ -84,7 +88,7 @@ The following adapters ship as typed factories so developers can wire them in wi
 
 - `createBrowserActionProofEvent` — URL / action / result / screenshot hash for browser agents (Browser Use, Jev, Page Agent, Iris).
 - `createPaymentIntentProofEvent` — payer / receiver / asset / amount / policy before a payment is signed (x402, Blocky402, HBAR/USDC).
-- `createWatcherSignalProofEvent` — wallet, market, GitHub, or news signal proofs (FOMO Robinhood Radar, repo watcher).
+- `createWatcherSignalProofEvent` — wallet, market, GitHub, or news signal proofs (FOMO Robinhood Radar, repo watcher, HBAR price watcher, GitHub issues watcher).
 - `createRagMemoryProofEvent` — question, answer, retrieved chunks hash (RAGFlow, MemPalace).
 
 ## Hedera depth
@@ -135,6 +139,6 @@ sample hash:      b822a0ff345e06eb5db1ea9cb37d6f322e91d78e6796779756dd2176ba0a7b
 hashscan topic:   https://hashscan.io/testnet/topic/0.0.10426202
 ```
 
-The first real submission in this repo published proof sequence 18 to the topic above (a real GitHub release watcher built on top of `createWatcherSignalProofEvent`), and `npm run mirror:verify` against the topic reports `ok: true` with `reason: mirror_hash_match` for that hash.
+The first real submission in this repo published proof sequence 18 to the topic above (a real GitHub release watcher built on top of `createWatcherSignalProofEvent`), and `npm run mirror:verify` against the topic reports `ok: true` with `reason: mirror_hash_match` for that hash. Sequences 19–28 are public-API watcher proofs from `npm run watch:hbar-price` and `npm run watch:github-issues`, all anchored to the same topic.
 
-For a detailed log of the four real sandbox exercises (clean install, real `.env.local` round-trip, custom adapter end-to-end, broken env detection) see `docs/SANDBOX_HISTORY.md`.
+For a detailed log of the sandbox exercises — clean install, real `.env.local` round-trip, custom adapter end-to-end, broken env detection, token association check via Mirror Node, GitHub release watcher, HBAR price watcher, GitHub issues watcher — see `docs/SANDBOX_HISTORY.md`.
