@@ -1,0 +1,21 @@
+# local reference clones
+hedera-harness/
+create-scaffold-hbar/
+
+# scaffold/dev outputs
+node_modules/
+.next/
+dist/
+build/
+coverage/
+_scaffold-tests/
+
+# local secrets/data
+.env
+.env.*
+!.env.example
+.data/
+
+# OS/editor
+.DS_Store
+Thumbs.db
