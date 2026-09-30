@@ -1,13 +1,13 @@
-import './globals.css';
 import type { Metadata } from 'next';
-import type { ReactNode } from 'react';
+import type { ReactElement, ReactNode } from 'react';
+import './globals.css';
 
 export const metadata: Metadata = {
   title: 'AgentProof HBAR',
-  description: 'HCS proof layer for AI, research, and document workflows.'
+  description: 'HCS proof layer for AI, research, and document workflows on Hedera testnet.'
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default function RootLayout({ children }: { children: ReactNode }): ReactElement {
   return (
     <html lang="en">
       <body>{children}</body>

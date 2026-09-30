@@ -6,10 +6,13 @@ import {
   TransactionId
 } from '@hashgraph/sdk';
 import { join } from 'node:path';
+import { formatError, formatHeadline, formatHint, formatJson, formatSuccess } from '../src/lib/cli/cli-output';
 import { loadHederaEnv } from '../src/lib/config/hedera-env';
 import { LocalProofIndex } from '../src/lib/index/local-proof-index';
 import { classifyHcsError } from '../src/lib/proof/hcs-error';
 import { buildSampleProof } from '../src/lib/proof/sample-proof';
+
+const color = process.stdout.isTTY === true && process.env.NO_COLOR !== '1';
 
 function parsePrivateKey(value: string): PrivateKey {
   if (value.startsWith('0x')) return PrivateKey.fromStringECDSA(value);
@@ -36,27 +39,25 @@ async function main(): Promise<void> {
 
       await new LocalProofIndex(join(process.cwd(), '.data', 'proofs.jsonl')).append(sample);
 
-      console.log(JSON.stringify({
-        ok: true,
+      console.log(formatSuccess(`Proof anchored to topic ${env.topicId} as sequence ${sequenceNumber}`, { color }));
+      console.log();
+      console.log(formatHeadline('Submit details', { color }));
+      console.log();
+      console.log(formatJson({
         network: env.network,
         topicId: env.topicId,
         transactionId: txResponse.transactionId.toString(),
         sequenceNumber,
         hash: sample.hash,
-        mirrorNodeUrl: env.mirrorNodeUrl,
-        mirrorVerifyCommand: `npm run mirror:verify -- --sequence ${sequenceNumber}`,
-        hashscanUrl: `https://hashscan.io/testnet/topic/${env.topicId}`
-      }, null, 2));
+        hashscanUrl: `https://hashscan.io/testnet/topic/${env.topicId}`,
+        mirrorVerifyCommand: `npm run mirror:verify -- --sequence ${sequenceNumber}`
+      }, { color }));
+      console.log();
+      console.log(formatHint(`Next: ${`npm run mirror:verify -- --sequence ${sequenceNumber}`}`, { color }));
     } catch (submitError) {
       const classified = classifyHcsError(submitError);
-      console.log(JSON.stringify({
-        ok: false,
-        network: env.network,
-        topicId: env.topicId,
-        operatorId: env.operatorId,
-        error: classified,
-        rawMessage: submitError instanceof Error ? submitError.message : String(submitError)
-      }, null, 2));
+      console.log(formatError(`HCS submit failed for topic ${env.topicId}`, classified, { color }));
+      console.log(formatHint('Run npm run doctor to validate your .env.local values.', { color }));
       process.exitCode = 1;
     }
   } finally {

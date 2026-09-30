@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
+import { formatCheck, formatHeadline, formatHint } from '../src/lib/cli/cli-output';
 import { describeHederaKey, parseHederaAccountId } from '../src/lib/doctor/key-parser';
 import { checkTokenAssociation } from '../src/lib/doctor/token-association';
 import { isVersionAtLeast } from '../src/lib/doctor/version';
@@ -30,6 +31,7 @@ function loadDotEnvLocal(): void {
 loadDotEnvLocal();
 
 const requiredNode = '20.18.3';
+const color = process.stdout.isTTY === true && process.env.NO_COLOR !== '1';
 
 type Check = [name: string, ok: boolean, detail: string];
 
@@ -101,13 +103,15 @@ async function main(): Promise<void> {
     ]);
   }
 
-  console.log('AgentProof HBAR Doctor');
+  console.log(formatHeadline('AgentProof HBAR Doctor', { color }));
+  console.log();
   for (const [name, ok, detail] of checks) {
-    console.log(`${ok ? 'OK ' : 'WARN'} ${name.padEnd(24)} ${detail}`);
+    console.log(formatCheck(name, ok, detail, { color }));
   }
+  console.log();
 
   if (!operatorId || !operatorKey) {
-    console.log('\nDemo mode is allowed. Add .env.local values to submit real HCS proofs.');
+    console.log(formatHint('Demo mode is allowed. Add .env.local values to submit real HCS proofs.', { color }));
   }
 }
 

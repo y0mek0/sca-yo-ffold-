@@ -1,0 +1,54 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: lint + typecheck + tests + build + doctor
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.18.3'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          cd hedera-agent-proof-kit
+          npm ci --no-audit --no-fund
+
+      - name: Lint
+        working-directory: hedera-agent-proof-kit
+        run: npm run lint
+
+      - name: Typecheck
+        working-directory: hedera-agent-proof-kit
+        run: npm run typecheck
+
+      - name: Tests
+        working-directory: hedera-agent-proof-kit
+        run: npm run test
+
+      - name: Build
+        working-directory: hedera-agent-proof-kit
+        run: npm run build
+
+      - name: Doctor (demo mode, no env)
+        working-directory: hedera-agent-proof-kit
+        run: npm run doctor
+
+      - name: Audit sample
+        working-directory: hedera-agent-proof-kit
+        run: npm run audit:sample
+
+      - name: Verify sample (off-chain only)
+        working-directory: hedera-agent-proof-kit
+        run: npm run verify:sample

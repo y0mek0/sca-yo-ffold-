@@ -13,7 +13,8 @@
     "audit:sample": "tsx scripts/audit-sample.ts",
     "verify:sample": "tsx scripts/verify-sample.ts",
     "hcs:submit": "tsx scripts/hcs-submit-sample.ts",
-    "mirror:verify": "tsx scripts/mirror-verify-sample.ts"
+    "mirror:verify": "tsx scripts/mirror-verify-sample.ts",
+    "watch:github-release": "tsx scripts/watch-github-release.ts"
   },
   "dependencies": {
     "@hashgraph/sdk": "^2.81.0",
