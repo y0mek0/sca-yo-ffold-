@@ -18,6 +18,6 @@ export function createWatcherSignalProofEvent(input: WatcherSignalInput): ProofE
       source: input.source,
       signal: input.signal
     },
-    metadata: { adapter: 'watcher-signal' }
+    metadata: { adapter: 'watcher-signal', source: input.source }
   });
 }
