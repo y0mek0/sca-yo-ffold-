@@ -13,8 +13,12 @@ describe('findHbarThresholds (sandbox analysis)', () => {
     expect(result.count).toBe(4);
     expect(result.min).toBeCloseTo(0.108595, 6);
     expect(result.max).toBeCloseTo(0.109236, 6);
-    expect(result.latest.sequenceNumber).toBe('25');
-    expect(result.latest.priceUsd).toBeCloseTo(0.108702, 6);
+    if (result.latest) {
+      expect(result.latest.sequenceNumber).toBe('25');
+      expect(result.latest.priceUsd).toBeCloseTo(0.108702, 6);
+    } else {
+      throw new Error('expected latest to be defined');
+    }
   });
 
   it('returns zeroed result for empty history', () => {
