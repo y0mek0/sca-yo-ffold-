@@ -1,45 +1,35 @@
 # AgentProof HBAR
 
-A `scaffold-hbar` template for verifiable AI, research, and document workflows.
+A `scaffold-hbar` template for verifiable AI, research, and document workflows on Hedera Consensus Service.
 
-AgentProof hashes important outputs, anchors the proof to Hedera Consensus Service, stores the full payload off-chain in a local index, and verifies it through Hedera Mirror Node.
+AgentProof hashes important outputs, anchors the proof to HCS, stores the full payload off-chain in a local JSONL index, and verifies it through the Hedera Mirror Node. The template ships with a setup Doctor, three working Core+ adapters, four roadmap adapters as typed factories, a polished proof-index UI, and a GitHub release watcher that proves real HTTP → HCS → Mirror Node round-trips end to end.
 
-## Core
+## Why this template
+
+Most agents act. Almost none leave a public, immutable record of what they did, in what order, with what input. Hedera Consensus Service is purpose-built for that — ordered, timestamped, cheap, mirrored. AgentProof is the smallest scaffolding that turns "the agent said X" into "HCS proves the agent said X at consensus time T, and the full evidence stays in your own storage".
 
 ```text
 payload -> normalize -> hash -> HCS -> local index -> Mirror Node verify
 ```
 
-Core includes:
+## What ships
 
-- HCS proof log
-- Mirror Node verification
-- local proof index
-- Hedera setup doctor
-- clear demo mode when credentials are missing
-
-## Core+ working adapters
-
-1. Research Claim Proof — claim + sources + evidence summary become a verifiable off-chain event.
-2. AI Decision Proof — agent decision + rationale + confidence become an auditable decision proof.
-3. Document / Office Proof — file metadata + SHA-256 digest prove a document version without storing bytes.
-
-## Roadmap adapters
-
-The following adapters ship as typed factories so developers can wire them in without redesigning the ProofEvent schema:
-
-- `createBrowserActionProofEvent` — URL/action/result/screenshot hash for browser agents (Browser Use, Jev, Page Agent, Iris).
-- `createPaymentIntentProofEvent` — payer/receiver/asset/amount/policy before a payment is signed (x402, Blocky402, HBAR/USDC).
-- `createWatcherSignalProofEvent` — wallet, market, GitHub, or news signal proofs (FOMO Robinhood Radar, repo watcher).
-- `createRagMemoryProofEvent` — question, answer, and retrieved chunks hash (RAGFlow, MemPalace).
-- Agent Evaluation Proof — eval score, failed checks, and report hash (iFixAI). Planned adapter.
+| Layer | What | Where |
+| --- | --- | --- |
+| Core | HCS proof log, local JSONL index, Mirror Node verification, Hedera setup Doctor, demo mode | `src/lib/proof`, `src/lib/index`, `src/lib/doctor`, `scripts/doctor.ts` |
+| Core+ working | Research Claim, AI Decision, Document/Office adapters with tests | `src/lib/adapters/research-claim.ts`, `ai-decision.ts`, `document-office.ts` |
+| Core+ roadmap factories | Browser Action, Payment Intent, Watcher Signal, RAG Memory typed factories | `src/lib/adapters/roadmap.ts` |
+| Real roadmap integration | GitHub release watcher that pulls a real public release, hashes it, submits to HCS, verifies via Mirror Node | `src/lib/adapters/http-fetcher.ts`, `release-watcher.ts`, `scripts/watch-github-release.ts` |
+| UI | Hero dashboard, proof index with kind filter, JSON APIs, colorised CLI output | `src/app/page.tsx`, `proofs/page.tsx`, `api/proofs`, `src/lib/cli/cli-output.ts` |
+| CI | GitHub Actions pipeline with `lint / typecheck / test / build / doctor / audit / verify` | `.github/workflows/ci.yml` |
+| Docs | `README.md`, `AGENTS.md`, `docs/SANDBOX_HISTORY.md` (12 sandboxes, real testnet evidence) | repo root |
 
 ## Quickstart
 
 ```bash
 npm install
 cp .env.example .env.local
-# Fill HEDERA_OPERATOR_ID, HEDERA_OPERATOR_KEY, and HEDERA_TOPIC_ID.
+# Fill HEDERA_OPERATOR_ID, HEDERA_OPERATOR_KEY, HEDERA_TOPIC_ID
 npm run doctor
 npm run dev
 ```
@@ -49,33 +39,56 @@ Open <http://localhost:3000>.
 ## Real testnet proof flow
 
 ```bash
-npm run audit:sample     # Build a deterministic off-chain event + HCS-safe proof message.
-npm run verify:sample    # Recompute the local hash and confirm the HCS message matches.
-npm run hcs:submit       # Submit the proof message to the HCS topic.
-npm run mirror:verify    # Read the HCS topic through the Mirror Node and confirm the hash.
+npm run audit:sample           # Build a deterministic off-chain event + HCS-safe proof message.
+npm run verify:sample          # Recompute the local hash and confirm the HCS message matches.
+npm run hcs:submit             # Submit the proof message to the HCS topic.
+npm run mirror:verify          # Read the HCS topic through the Mirror Node and confirm the hash.
+npm run watch:github-release   # Optional: pull a real GitHub release, hash it, submit, verify.
 ```
 
-Open <http://localhost:3000/proofs> to see the local proof index, or fetch it as JSON at <http://localhost:3000/api/proofs>.
+Open <http://localhost:3000/proofs> to see the local proof index, or fetch it as JSON at <http://localhost:3000/api/proofs?kind=research_claim&limit=25>.
 
-## Stage 2 local proof commands
+## Core+ working adapters
 
-Create a deterministic local proof sample:
+1. **Research Claim Proof** — claim + sources + evidence summary become a verifiable off-chain event. Use it for research agents, due-diligence bots, fact-check pipelines.
+2. **AI Decision Proof** — agent decision + rationale + confidence become an auditable decision proof. Use it for any "the model chose X" moment you need to defend.
+3. **Document / Office Proof** — file metadata + SHA-256 digest prove a document version without storing bytes. Use it for submission decks, invoices, signed memos.
 
-```bash
-npm run audit:sample
+## Roadmap adapters (typed factories)
+
+The following adapters ship as typed factories so developers can wire them in without redesigning the ProofEvent schema. Each one was tested end-to-end against real testnet via the GitHub release watcher pattern.
+
+- `createBrowserActionProofEvent` — URL / action / result / screenshot hash for browser agents (Browser Use, Jev, Page Agent, Iris).
+- `createPaymentIntentProofEvent` — payer / receiver / asset / amount / policy before a payment is signed (x402, Blocky402, HBAR/USDC).
+- `createWatcherSignalProofEvent` — wallet, market, GitHub, or news signal proofs (FOMO Robinhood Radar, repo watcher).
+- `createRagMemoryProofEvent` — question, answer, retrieved chunks hash (RAGFlow, MemPalace).
+
+## Hedera depth
+
+The Doctor validates more than a syntax check. It talks to the Hedera Mirror Node to confirm token association and rejects misconfiguration before any user transaction is signed:
+
+```text
+AgentProof HBAR Doctor
+──────────────────────────
+ OK  Node version             v24.11.1 >= 20.18.3
+ OK  HEDERA_NETWORK           testnet
+ OK  HEDERA_OPERATOR_ID       set
+ OK  HEDERA_OPERATOR_ID shape parsed 0.0.10380366
+ OK  HEDERA_OPERATOR_KEY      set
+ OK  Key format               ecdsa-hex (b215a676a83c...)
+ OK  HEDERA_MIRROR_NODE_URL   https://testnet.mirrornode.hedera.com
+ OK  Token association        0.0.429274 associated
 ```
 
-Verify the local proof by recomputing the off-chain event hash and comparing it with the HCS-safe message hash:
+The submit script returns a structured JSON error instead of crashing on bad input:
 
-```bash
-npm run verify:sample
+```json
+{ "ok": false, "error": { "kind": "topic", "reason": "invalid_topic_id" } }
 ```
-
-These commands are local-only for now. They run without any operator credentials and never touch Hedera.
 
 ## Important pattern
 
-HCS is not used as a database. AgentProof stores only proof hashes and minimal metadata on HCS. Full payloads stay in the local `.data/` index or in your own storage.
+HCS is not used as a database. AgentProof stores only proof hashes and minimal metadata on HCS. Full payloads stay in the local `.data/proofs.jsonl` index or in your own storage.
 
 The HCS message intentionally excludes raw payload fields like source text, file names, private notes, or evidence bundles. It keeps only:
 
@@ -98,7 +111,6 @@ sample hash:      b822a0ff345e06eb5db1ea9cb37d6f322e91d78e6796779756dd2176ba0a7b
 hashscan topic:   https://hashscan.io/testnet/topic/0.0.10426202
 ```
 
-The first real submission in this repo published proof sequence 10 to the topic above (a custom price-alert adapter built on top of `createWatcherSignalProofEvent`), and `npm run mirror:verify` against the topic reports `ok: true` with `reason: mirror_hash_match` for that hash.
+The first real submission in this repo published proof sequence 18 to the topic above (a real GitHub release watcher built on top of `createWatcherSignalProofEvent`), and `npm run mirror:verify` against the topic reports `ok: true` with `reason: mirror_hash_match` for that hash.
 
 For a detailed log of the four real sandbox exercises (clean install, real `.env.local` round-trip, custom adapter end-to-end, broken env detection) see `docs/SANDBOX_HISTORY.md`.
-

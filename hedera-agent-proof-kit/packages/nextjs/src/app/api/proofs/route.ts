@@ -1,11 +1,23 @@
 import { join } from 'node:path';
 import { NextResponse } from 'next/server';
+import { filterAndLimitProofs, type ApiQuery } from '../../../lib/proof/api-proofs-filter';
 import { readLocalProofs } from '../../../lib/index/read-local-proofs';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET(): Promise<NextResponse> {
+export async function GET(request: Request): Promise<NextResponse> {
+  const url = new URL(request.url);
+  const query: ApiQuery = {
+    kind: url.searchParams.get('kind') ?? undefined,
+    limit: url.searchParams.get('limit') ?? undefined
+  };
   const indexPath = join(process.cwd(), '.data', 'proofs.jsonl');
-  const proofs = await readLocalProofs(indexPath);
-  return NextResponse.json({ count: proofs.length, proofs });
+  const all = await readLocalProofs(indexPath);
+  const proofs = filterAndLimitProofs(all, query);
+  return NextResponse.json({
+    count: proofs.length,
+    total: all.length,
+    query,
+    proofs
+  });
 }

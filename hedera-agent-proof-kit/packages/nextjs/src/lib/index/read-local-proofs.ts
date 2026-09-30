@@ -7,7 +7,7 @@ export type LocalProofSummary = {
   digest: string;
   algorithm: 'sha256';
   adapter?: string;
-  recordedAt: string;
+  recordedAt?: string;
 };
 
 function readJsonLines(path: string): Array<Record<string, unknown>> {
