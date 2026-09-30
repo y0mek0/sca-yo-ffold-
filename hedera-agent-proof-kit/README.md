@@ -94,5 +94,5 @@ sample hash:      b822a0ff345e06eb5db1ea9cb37d6f322e91d78e6796779756dd2176ba0a7b
 hashscan topic:   https://hashscan.io/testnet/topic/0.0.10426202
 ```
 
-The first real submission in this repo published proof sequence 6 to the topic above, and `npm run mirror:verify` reports `ok: true` with `reason: mirror_hash_match` for that hash.
+The first real submission in this repo published proof sequence 7 to the topic above, and `npm run mirror:verify` reports `ok: true` with `reason: mirror_hash_match` for that hash.
 
