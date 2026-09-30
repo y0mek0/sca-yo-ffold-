@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { fetchGitHubRelease, type GitHubRelease } from './http-fetcher';
+import { fetchGitHubRelease } from './http-fetcher';
 
 describe('fetchGitHubRelease', () => {
   it('returns the latest release for a public repo', async () => {
     const calls: Array<{ url: string }> = [];
-    const release: GitHubRelease = {
+    const payload = {
       tag_name: 'v0.1.0',
       name: 'Demo release',
       html_url: 'https://github.com/y0mek0/sca-yo-ffold-/releases/tag/v0.1.0',
@@ -18,7 +18,7 @@ describe('fetchGitHubRelease', () => {
       repo: 'sca-yo-ffold-',
       fetchImpl: async (input) => {
         calls.push({ url: String(input) });
-        return new Response(JSON.stringify(release), {
+        return new Response(JSON.stringify(payload), {
           status: 200,
           headers: { 'content-type': 'application/json' }
         });
