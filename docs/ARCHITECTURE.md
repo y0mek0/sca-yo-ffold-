@@ -1,76 +1,76 @@
-# AgentProof HBAR: как это работает
+# AgentProof HBAR: How It Works
 
-## Простая формула
+## The simple formula
 
-**Внешний источник даёт данные. Adapter приводит их к единому виду. AgentProof делает цифровой отпечаток этих данных. Hedera HCS публично фиксирует отпечаток. Полная запись остаётся в собственном хранилище. Mirror Node позже подтверждает, что отпечаток действительно был записан и не изменился.**
+**An external source provides data. An adapter converts it into one stable format. AgentProof creates a digital fingerprint of that data. Hedera HCS records the fingerprint publicly. The full event stays in separate storage. Mirror Node later confirms that the fingerprint was recorded and has not changed.**
 
-Коротко:
+In short:
 
 ```text
-данные или действие
-→ единый JSON
-→ SHA-256 отпечаток
-→ HCS proof log
-→ полная запись вне сети
-→ Mirror Node проверка
+external data or action
+→ normalized JSON
+→ SHA-256 fingerprint
+→ HCS public proof log
+→ full event stored off-chain
+→ Mirror Node verification
 ```
 
-AgentProof не доказывает, что внешний источник был прав. Он доказывает, что именно эти данные были зафиксированы в определённый момент.
+AgentProof does not prove that an external source was correct. It proves exactly what data was recorded and when.
 
-## Слои
+## Layers
 
-### Источники
+### Sources
 
-- GitHub releases и issues;
+- GitHub releases and issues;
 - CoinGecko HBAR price;
 - SaucerSwap pool API;
-- Hedera Mirror Node для HTS token/treasury state;
-- документы и отчёты;
-- результаты платежей Hedera.
+- Hedera Mirror Node for HTS token and treasury state;
+- documents and reports;
+- Hedera payment results.
 
 ### Adapters
 
-Каждый adapter получает ответ источника и создаёт общий `ProofEvent`. Благодаря этому источник можно заменить, не меняя hashing, HCS и verification.
+Each adapter receives a source response and creates a shared `ProofEvent`. A source can therefore be replaced without changing hashing, HCS submission, or verification.
 
-### Нормализация и hash
+### Normalization and hashing
 
-Нормализация оставляет только поля, нужные для конкретного события. Затем canonical JSON хэшируется через SHA-256. Один изменённый символ даёт другой hash.
+Normalization keeps the fields needed for one event type. The canonical JSON is then hashed with SHA-256. Changing one character creates a different hash.
 
 ### Local proof index
 
-Полный event хранится вне HCS в локальном JSONL index. В реальном продукте этот слой можно заменить на database, object storage или другое хранилище.
+The full event stays off-chain in the local JSONL index. A production application can replace this layer with a database, object storage, or another storage provider.
 
 ### HCS
 
-HCS используется как публичный последовательный журнал proof-сообщений. В HCS отправляется не большой payload, а hash и небольшие metadata.
+HCS is the public ordered proof log. AgentProof sends a compact message containing the hash and minimal metadata instead of a large payload.
 
 ### Mirror Node
 
-Mirror Node используется для независимого чтения HCS message и Hedera transaction. Локальный hash сравнивается с hash из HCS.
+Mirror Node independently reads the HCS message and Hedera transaction. The local hash is compared with the hash recorded in HCS.
 
-## Реальный и demo режимы
+## Demo and live modes
 
-`audit:sample` и `verify:sample` используют детерминированный локальный sample. Это безопасный способ проверить схему без credentials.
+`audit:sample` and `verify:sample` use a deterministic local sample. They are safe checks for the event schema and hashing flow and do not submit a transaction.
 
-`watch:*`, `hcs:submit` и `payment:intent:hbar` используют Hedera testnet credentials из локального `.env.local`.
+`watch:*`, `hcs:submit`, and `payment:intent:hbar` use Hedera testnet credentials from a local `.env.local` file.
 
-В репозитории нет credentials, `.env.local` и runtime `.data` artifacts.
+The public repository contains no credentials, `.env.local`, or runtime `.data` artifacts.
 
 ## Payment flow
 
-Платёж состоит из двух разных событий:
+A payment has two separate events:
 
 ```text
 payment intent
-→ proof намерения
-→ реальный HBAR transfer
+→ intent proof
+→ real HBAR transfer
 → Hedera SUCCESS receipt
 → execution proof
 → Mirror Node verification
 ```
 
-`intent` означает, что агент собирался заплатить. `execution` означает, что Hedera действительно подтвердила перевод.
+`intent` means that the agent planned to pay. `execution` means that Hedera confirmed the transfer.
 
-## Границы проекта
+## Project boundaries
 
-AgentProof не является trading bot, exchange, wallet, financial advisor, compliance SaaS или database. Он не делает swaps и не доказывает правильность AI-решения. Он фиксирует входные данные, решение или результат действия и делает эту запись проверяемой.
+AgentProof is not a trading bot, exchange, wallet, financial advisor, compliance SaaS product, or database. It does not execute swaps and does not prove that an AI decision was correct. It records input data, a decision, or an action result and makes that record independently verifiable.

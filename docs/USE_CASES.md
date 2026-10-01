@@ -1,65 +1,65 @@
-# AgentProof HBAR: профессии и готовые сценарии
+# AgentProof HBAR: Use Cases and Buildable Programs
 
-Все сценарии используют один и тот же proof layer. Отличаются только источники данных и действия после анализа.
+All six professions use the same proof layer. They differ in the data sources they read and the actions they take after analysis.
 
-## Не Web3: DevOps / SRE / release manager
+## Non-Web3: DevOps / SRE / release manager
 
-### Что полезно
+### Useful components
 
 - GitHub release watcher;
 - GitHub issues watcher;
 - AI Decision proof;
 - Document hash;
 - Browser Action proof;
-- HCS timestamp и Mirror verification.
+- HCS timestamp and Mirror verification.
 
-### Схема
+### Flow
 
 ```text
 release + issues
-→ анализ deployment agent
+→ deployment analysis
 → deploy / rollback decision
-→ proof решения
+→ decision proof
 → HCS
 ```
 
-### Две программы
+### Two useful programs
 
-**Release Safety Gate** проверяет release, critical issues и security notes перед deploy. Возвращает `DEPLOY` или `BLOCK` и фиксирует входные данные и причину.
+**Release Safety Gate** checks a release, critical issues, and security notes before deployment. It returns `DEPLOY` or `BLOCK` and records the inputs and reason.
 
-**Incident Timeline Builder** собирает releases, issues, alerts, rollback и решения оператора в одну временную линию. Каждое важное событие получает proof.
+**Incident Timeline Builder** combines releases, issues, alerts, rollbacks, and operator decisions into one timeline. Each important event gets a proof.
 
-## Не Web3: research / due diligence analyst
+## Non-Web3: research / due diligence analyst
 
-### Что полезно
+### Useful components
 
 - Research Claim proof;
 - Document hash;
 - GitHub snapshots;
-- внешний API snapshot;
+- external API snapshots;
 - RAG memory hash;
-- HCS и Mirror verification.
+- HCS and Mirror verification.
 
-### Схема
+### Flow
 
 ```text
-источники
+sources
 → snapshots
 → research claim
 → report
-→ hash report
+→ report hash
 → HCS
 ```
 
-### Две программы
+### Two useful programs
 
-**Due Diligence Pack Generator** собирает источники, snapshots, evidence и risk flags в один отчёт с proof-ссылками.
+**Due Diligence Pack Generator** collects sources, snapshots, evidence, and risk flags into one report with proof links.
 
-**Research Claim Registry** хранит отдельные утверждения, источники, evidence, confidence и HCS sequence. Позже можно проверить, на каких данных строилось утверждение.
+**Research Claim Registry** stores individual claims, sources, evidence, confidence, and HCS sequences. Later, the analyst can check which data supported each claim.
 
-## Не Web3: document / legal / accounting operations
+## Non-Web3: document / legal / accounting operations
 
-### Что полезно
+### Useful components
 
 - Document hash;
 - AI Decision proof;
@@ -68,7 +68,7 @@ release + issues
 - Payment Execution;
 - HCS timestamp.
 
-### Схема
+### Flow
 
 ```text
 document
@@ -79,24 +79,24 @@ document
 → execution proof
 ```
 
-### Две программы
+### Two useful programs
 
-**Invoice Proof & Payment** хэширует invoice, фиксирует approval, создаёт payment intent, выполняет HBAR transfer и связывает результат с исходным документом.
+**Invoice Proof & Payment** hashes an invoice, records approval, creates a payment intent, executes an HBAR transfer, and links the result to the original document.
 
-**Contract Version Registry** хранит версии договоров, invoices и reports. Для каждой версии сохраняются hash, время, автор, approval и HCS sequence.
+**Contract Version Registry** stores versions of contracts, invoices, and reports. Each version has a hash, timestamp, author, approval record, and HCS sequence.
 
 ## Web3: protocol researcher / crypto data analyst
 
-### Что полезно
+### Useful components
 
 - SaucerSwap market snapshot;
-- HTS token/treasury snapshot;
+- HTS token and treasury snapshot;
 - HBAR price snapshot;
-- GitHub releases/issues;
+- GitHub releases and issues;
 - Research Claim proof;
 - Document hash.
 
-### Схема
+### Flow
 
 ```text
 market data + token data + protocol activity
@@ -105,15 +105,15 @@ market data + token data + protocol activity
 → HCS
 ```
 
-### Две программы
+### Two useful programs
 
-**Protocol Health Dashboard** показывает token supply, treasury balance, pool liquidity, HBAR price и development activity. Daily snapshots можно проверять через HCS.
+**Protocol Health Dashboard** shows token supply, treasury balance, pool liquidity, HBAR price, and development activity. Daily snapshots can be checked through HCS.
 
-**Ecosystem Change Detector** сравнивает два snapshot и показывает изменения supply, treasury, liquidity, price, releases и critical issues.
+**Ecosystem Change Detector** compares two snapshots and reports changes in supply, treasury, liquidity, price, releases, and critical issues.
 
 ## Web3: DAO treasury / grants / governance
 
-### Что полезно
+### Useful components
 
 - HTS treasury snapshot;
 - proposal document hash;
@@ -121,9 +121,9 @@ market data + token data + protocol activity
 - AI Decision;
 - Payment Intent;
 - Payment Execution;
-- HCS и Mirror Node.
+- HCS and Mirror Node.
 
-### Схема
+### Flow
 
 ```text
 proposal
@@ -134,24 +134,24 @@ proposal
 → HBAR execution proof
 ```
 
-### Две программы
+### Two useful programs
 
-**Grant Allocation Tracker** связывает proposal, recipient, budget, milestones, approvals и реальные payments. Важные изменения фиксируются как proofs.
+**Grant Allocation Tracker** links a proposal, recipient, budget, milestones, approvals, and real payments. Important changes are recorded as proofs.
 
-**Treasury Decision Room** собирает текущий treasury state, proposal, историю payments и risk notes в пакет для голосования. После approval пакет связывается с payment intent.
+**Treasury Decision Room** gathers the current treasury state, proposal, payment history, and risk notes into a voting package. After approval, the package links to the payment intent.
 
 ## Web3: crypto risk manager / market operations
 
-### Что полезно
+### Useful components
 
 - SaucerSwap pool snapshot;
-- HTS supply и treasury snapshot;
+- HTS supply and treasury snapshot;
 - HBAR price;
-- GitHub issues/releases;
+- GitHub issues and releases;
 - AI Decision proof;
-- Payment Intent при разрешённом действии.
+- Payment Intent when an action is approved.
 
-### Схема
+### Flow
 
 ```text
 market + token + protocol activity
@@ -160,13 +160,13 @@ market + token + protocol activity
 → HCS proof
 ```
 
-### Две программы
+### Two useful programs
 
-**Risk Snapshot Monitor** периодически фиксирует liquidity, supply, treasury, price и protocol activity, а затем показывает изменения между snapshots.
+**Risk Snapshot Monitor** periodically records liquidity, supply, treasury, price, and protocol activity, then shows changes between snapshots.
 
-**Policy Decision Engine** применяет правила: низкая liquidity блокирует действие, высокая treasury concentration требует review, critical issue ставит операцию на паузу. В proof сохраняются правила и входные данные.
+**Policy Decision Engine** applies rules: low liquidity blocks an action, high treasury concentration requires review, and a critical issue pauses the operation. The proof contains the rules and input data.
 
-## Как профессии взаимодействуют
+## How the professions connect
 
 ```text
 protocol researcher
@@ -176,17 +176,17 @@ crypto risk manager
 → risk decision
         ↓
 DAO governance
-→ proposal и approval
+→ proposal and approval
         ↓
 treasury / accounting
 → payment intent
         ↓
 Hedera
-→ HBAR transfer и execution proof
+→ HBAR transfer and execution proof
 ```
 
-Весь путь может быть проверен позже через HCS и Mirror Node.
+The whole path can later be checked through HCS and Mirror Node.
 
-## Общая граница
+## Shared boundary
 
-Proof показывает, какие данные и решения были записаны. Он не говорит, что рынок был честным, AI был прав или сделка была выгодной.
+A proof shows which data and decisions were recorded. It does not say that the market was fair, the AI was right, or the trade was profitable.

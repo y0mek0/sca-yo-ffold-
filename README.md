@@ -9,17 +9,17 @@ AgentProof hashes important outputs, anchors the proof to HCS, stores the full p
 Most agents act. Almost none leave a public, immutable record of what they did, in what order, with what input. Hedera Consensus Service is purpose-built for that — ordered, timestamped, cheap, mirrored. AgentProof is the smallest scaffolding that turns "the agent said X" into "HCS proves the agent said X at consensus time T, and the full evidence stays in your own storage".
 
 ```text
-внешние данные или действие
-→ единый JSON
-→ SHA-256 отпечаток
-→ HCS публично фиксирует отпечаток
-→ полный event хранится отдельно
-→ Mirror Node подтверждает запись
+external data or action
+→ normalized JSON
+→ SHA-256 fingerprint
+→ HCS public proof log
+→ full event stored off-chain
+→ Mirror Node verification
 ```
 
-По-человечески: AgentProof показывает, какие данные система увидела, какое решение или действие зафиксировала и когда это произошло. Он не доказывает, что внешний источник был прав или что AI принял правильное решение.
+In plain English: AgentProof shows what data the system saw, which decision or action it recorded, and when that happened. It does not prove that an external source was correct or that the AI made the right decision.
 
-Подробнее: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md), [`docs/GETTING_STARTED.md`](docs/GETTING_STARTED.md) и [`docs/USE_CASES.md`](docs/USE_CASES.md).
+More detail: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md), [`docs/GETTING_STARTED.md`](docs/GETTING_STARTED.md), and [`docs/USE_CASES.md`](docs/USE_CASES.md).
 
 ## What ships
 

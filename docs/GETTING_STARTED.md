@@ -1,22 +1,22 @@
-# AgentProof HBAR: запуск и проверка с нуля
+# AgentProof HBAR: Start and Verify from Scratch
 
-## 1. Что нужно
+## 1. Requirements
 
 - Node.js `>=20.18.3`;
 - npm;
 - public GitHub repository;
-- Hedera testnet account для реального HCS proof;
+- Hedera testnet account for a real HCS proof;
 - HCS topic;
-- `.env.local` только локально.
+- `.env.local` kept local only.
 
-## 2. Установка
+## 2. Install
 
 ```bash
 npm install
 cp .env.example .env.local
 ```
 
-Заполнить локально:
+Fill the local file:
 
 ```text
 HEDERA_NETWORK=testnet
@@ -26,41 +26,41 @@ HEDERA_TOPIC_ID=0.0.xxxxx
 HEDERA_MIRROR_NODE_URL=https://testnet.mirrornode.hedera.com
 ```
 
-Ключ нельзя добавлять в GitHub, README, frontend или HCS payload.
+Never add the key to GitHub, README, frontend code, or an HCS payload.
 
-## 3. Проверка окружения
+## 3. Check the environment
 
 ```bash
 npm run doctor
 ```
 
-Doctor проверяет Node version, testnet, operator ID, key format, Mirror Node, token association и local proof index.
+Doctor checks the Node version, testnet, operator ID, key format, Mirror Node, token association, and local proof index.
 
-Demo mode без credentials разрешён. Он должен показать понятное предупреждение, а не падать.
+Demo mode without credentials is allowed. It should show a clear warning instead of failing.
 
-## 4. Локальный proof flow
+## 4. Local proof flow
 
 ```bash
 npm run audit:sample
 npm run verify:sample
 ```
 
-Этот flow не отправляет транзакцию. Он проверяет event normalization, hash и компактное HCS-сообщение на локальном sample.
+This flow does not submit a transaction. It checks event normalization, hashing, and the compact HCS message on a local sample.
 
-## 5. Реальный общий HCS flow
+## 5. Real HCS flow
 
 ```bash
 npm run hcs:submit
 npm run mirror:verify -- --sequence <N>
 ```
 
-Ожидаемый результат:
+Expected result:
 
 ```text
 normalize → SHA-256 → HCS sequence → Mirror hash match
 ```
 
-## 6. Реальные read-only snapshots
+## 6. Read-only snapshots
 
 SaucerSwap:
 
@@ -69,14 +69,14 @@ npm run watch:saucerswap -- --pool-id 0
 npm run mirror:verify -- --sequence <N>
 ```
 
-HTS token/treasury:
+HTS token and treasury:
 
 ```bash
 npm run watch:hts-treasury -- --token-id 0.0.429274
 npm run mirror:verify -- --sequence <N>
 ```
 
-Получение данных из GitHub, CoinGecko, SaucerSwap и Mirror Node не требует API key. Credentials нужны только для отправки proof в HCS.
+GitHub, CoinGecko, SaucerSwap, and Mirror Node reads do not require an API key. Credentials are required only to submit a proof to HCS.
 
 ## 7. Payment flow
 
@@ -84,7 +84,7 @@ npm run mirror:verify -- --sequence <N>
 npm run payment:intent:hbar -- --receiver 0.0.98 --amount-tinybar 1
 ```
 
-Проверять нужно отдельно:
+Check these separately:
 
 ```text
 intent proof
@@ -94,7 +94,7 @@ execution proof
 Mirror verification
 ```
 
-Не путать intent с реальным transfer.
+Do not treat an intent as a completed transfer.
 
 ## 8. UI smoke
 
@@ -102,19 +102,19 @@ Mirror verification
 npm run dev
 ```
 
-Проверить:
+Check:
 
 ```text
-/          200
-/proofs    200
-/api/doctor 200
-/api/proofs 200
-/missing   404
+/             200
+/proofs       200
+/api/doctor   200
+/api/proofs   200
+/missing      404
 ```
 
-Это HTTP smoke. Полноценный Playwright E2E в template не заявляется.
+This is HTTP smoke testing. The template does not claim a full Playwright E2E suite.
 
-## 9. Полный gate
+## 9. Full quality gate
 
 ```bash
 npm run lint
@@ -127,7 +127,7 @@ npm run verify:sample
 git diff --check
 ```
 
-## 10. Перед публикацией
+## 10. Before publishing
 
 ```bash
 git rev-parse --show-toplevel
@@ -136,6 +136,6 @@ git status --short
 git diff --check
 ```
 
-Проверить, что в Git нет `.env.local`, `.env`, `.data`, private keys, API keys и runtime artifacts.
+Check that Git does not contain `.env.local`, `.env`, `.data`, private keys, API keys, or runtime artifacts.
 
-Также проверить свежий scaffold через `create-scaffold-hbar` в отдельной временной папке. Локальный успех текущего checkout не заменяет fresh scaffold regression.
+Also test a fresh scaffold with `create-scaffold-hbar` in a separate temporary folder. A successful local checkout is not a substitute for fresh scaffold regression.
