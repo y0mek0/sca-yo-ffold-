@@ -12,7 +12,9 @@ const adapterDescriptions: Record<string, string> = {
   'browser-action': 'Browser-agent action proof: URL, action, result, screenshot hash.',
   'payment-intent': 'Payment intent proof: payer, receiver, asset, amount, policy.',
   'watcher-signal': 'Watcher signal proof: source, signal type.',
-  'rag-memory': 'RAG memory proof: question, answer, retrieved chunks.'
+  'rag-memory': 'RAG memory proof: question, answer, retrieved chunks.',
+  'saucerswap-snapshot': 'Read-only SaucerSwap market snapshot for Hedera pool research.',
+  'hts-treasury-snapshot': 'Read-only HTS token and treasury snapshot from Mirror Node.'
 };
 
 type IndexSearchParams = Record<string, string | string[] | undefined>;
@@ -23,7 +25,9 @@ const adapterCard = [
   ['Document / Office Proof', 'document-office'],
   ['Browser Action Proof', 'browser-action'],
   ['Payment Intent Proof', 'payment-intent'],
-  ['Watcher / Radar Proof', 'watcher-signal']
+  ['Watcher / Radar Proof', 'watcher-signal'],
+  ['SaucerSwap Market Snapshot', 'saucerswap-snapshot'],
+  ['HTS Treasury Snapshot', 'hts-treasury-snapshot']
 ] as const;
 
 export default async function HomePage({ searchParams }: { searchParams: IndexSearch }): Promise<ReactElement> {
@@ -62,11 +66,38 @@ npm run mirror:verify -- --sequence <N>`}
         </pre>
       </section>
 
+      <section className="panel proof-flow-panel">
+        <header className="section-head">
+          <div>
+            <div className="eyebrow">The proof flow</div>
+            <h2>What happens after the agent sees something.</h2>
+          </div>
+        </header>
+        <div className="grid three">
+          <article className="card adapter-card">
+            <span className="card-pill">1 · capture</span>
+            <strong>Get the source or action</strong>
+            <p>Read GitHub, SaucerSwap, HTS, a document, or a payment result.</p>
+          </article>
+          <article className="card adapter-card">
+            <span className="card-pill">2 · fingerprint</span>
+            <strong>Normalize and hash</strong>
+            <p>Turn the event into stable JSON and create its SHA-256 fingerprint.</p>
+          </article>
+          <article className="card adapter-card">
+            <span className="card-pill">3 · verify</span>
+            <strong>Anchor and check</strong>
+            <p>Store the full event off-chain, anchor the digest to HCS, and check it through Mirror Node.</p>
+          </article>
+        </div>
+        <p className="section-note">Demo samples are local. Watchers and payment commands use real Hedera testnet credentials and return a sequence for Mirror verification.</p>
+      </section>
+
       <section className="panel">
         <header className="section-head">
           <div>
-            <div className="eyebrow">Working Core+ adapters</div>
-            <h2>Three adapters ship as real source of truth.</h2>
+            <div className="eyebrow">Proof adapters</div>
+            <h2>Turn a source or action into a verifiable record.</h2>
           </div>
         </header>
         <div className="grid three">

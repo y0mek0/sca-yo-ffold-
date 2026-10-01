@@ -28,7 +28,7 @@ describe('readLocalProofs security smoke', () => {
   it('does not leak raw payload fields', async () => {
     tempDir = await mkdtemp(join(tmpdir(), 'agentproof-leak-'));
     const file = join(tempDir, 'proofs.jsonl');
-    const secret = 'SECRET_PRIVATE_VALUE_0xabcdef0123456789';
+    const secret = 'REDACTED_TEST_VALUE_0xabcdef0123456789';
     const record = {
       event: { kind: 'k', subject: { id: 's', type: 't' }, payload: { secret } },
       hash: { algorithm: 'sha256', digest: 'a'.repeat(64) },

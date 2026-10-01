@@ -9,8 +9,17 @@ AgentProof hashes important outputs, anchors the proof to HCS, stores the full p
 Most agents act. Almost none leave a public, immutable record of what they did, in what order, with what input. Hedera Consensus Service is purpose-built for that — ordered, timestamped, cheap, mirrored. AgentProof is the smallest scaffolding that turns "the agent said X" into "HCS proves the agent said X at consensus time T, and the full evidence stays in your own storage".
 
 ```text
-payload -> normalize -> hash -> HCS -> local index -> Mirror Node verify
+внешние данные или действие
+→ единый JSON
+→ SHA-256 отпечаток
+→ HCS публично фиксирует отпечаток
+→ полный event хранится отдельно
+→ Mirror Node подтверждает запись
 ```
+
+По-человечески: AgentProof показывает, какие данные система увидела, какое решение или действие зафиксировала и когда это произошло. Он не доказывает, что внешний источник был прав или что AI принял правильное решение.
+
+Подробнее: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md), [`docs/GETTING_STARTED.md`](docs/GETTING_STARTED.md) и [`docs/USE_CASES.md`](docs/USE_CASES.md).
 
 ## What ships
 
@@ -22,7 +31,7 @@ payload -> normalize -> hash -> HCS -> local index -> Mirror Node verify
 | Real integrations | GitHub release watcher, GitHub issues watcher, HBAR price watcher (CoinGecko), SaucerSwap read-only pool snapshot, HTS treasury/token snapshot, and Payment Intent + real HBAR transfer — real testnet sequences | `src/lib/adapters/http-fetcher.ts`, `release-watcher.ts`, `github-issues-fetcher.ts`, `coingecko-fetcher.ts`, `price-watcher.ts`, `saucerswap-snapshot.ts`, `hts-treasury-snapshot.ts`, `payment-intent-execution.ts`, `scripts/watch-*.ts`, `scripts/payment-intent-hbar.ts` |
 | UI | Hero dashboard, proof index with kind filter, JSON APIs, colorised CLI output | `src/app/page.tsx`, `proofs/page.tsx`, `api/proofs`, `src/lib/cli/cli-output.ts` |
 | CI | GitHub Actions pipeline with `lint / typecheck / test / build / doctor / audit / verify` | `.github/workflows/ci.yml` |
-| Docs | `README.md`, `AGENTS.md`, `docs/SANDBOX_HISTORY.md` (12 sandboxes, real testnet evidence) | repo root |
+| Docs | `README.md`, `AGENTS.md`, `docs/ARCHITECTURE.md`, `docs/GETTING_STARTED.md`, `docs/USE_CASES.md`, `docs/BOUNTY_CHECKLIST.md`, `docs/SANDBOX_HISTORY.md`, `docs/BOUNTY_EVIDENCE.md` | repo root |
 
 ## Quickstart
 
@@ -97,29 +106,23 @@ The Doctor now reports the size of the local proof index so you can tell at a gl
  OK  Local proof index        12 proofs on file (10 research_claim, 2 ai_decision)
 ```
 
-The `add:adapter` command scaffolds a new adapter file under `packages/nextjs/src/lib/adapters/` with the correct imports, naming, and `TODO` markers. Fill them in, add a vitest file, and you can wire the adapter into a script or API route.
+The `add:adapter` command scaffolds a new adapter file under `packages/nextjs/src/lib/adapters/` with the correct imports, naming, and input placeholders. Fill them in, add a vitest file, and wire the adapter into a script or API route.
 
-## Who this fits best — TODO: expand with concrete workflows
+## Who this fits best
 
-AgentProof is a Hedera proof layer/template, not a trading platform, compliance SaaS, database, wallet, or execution engine. Its core value is:
+### Non-Web3
 
-```text
-external source → normalized event → SHA-256 → HCS → Mirror verification
-```
+- **DevOps / SRE / release manager** — prove release, issue, escalation and approval events around GitHub workflows.
+- **Research / due diligence analyst** — anchor claims, sources, data snapshots and report versions.
+- **Document, legal and accounting operations** — prove the integrity and existence of a particular invoice, contract, memo or report version.
 
-The strongest non-crypto users are:
+### Web3
 
-- **Release manager / DevOps / SRE / engineering compliance** — prove release, issue, escalation, and approval events around GitHub workflows.
-- **Research or due-diligence analyst** — anchor claims, sources, data snapshots, and report versions.
-- **Document, legal, or accounting operations** — prove the integrity and existence of a particular invoice, contract, memo, or report version.
+- **Protocol researcher / crypto data analyst** — combine GitHub activity, HBAR price, SaucerSwap market snapshots and HTS token state.
+- **DAO treasury / grants / governance operations** — anchor proposals, treasury snapshots, rationale, approvals and payments.
+- **Crypto risk manager / market operations** — record market signals and risk decisions; AgentProof does not execute trades.
 
-The strongest crypto users are:
-
-- **Protocol researcher / crypto data analyst** — combine GitHub releases/issues, market snapshots, research claims, and report hashes.
-- **DAO treasury / grants / governance operations** — anchor proposals, policy versions, rationale, and approval decisions.
-- **Crypto risk manager / market operations** — record market signals and risk decisions around trading; AgentProof does not execute trades.
-
-Important boundary: a proof shows what was recorded and when. It does not prove that an external claim was true, that an AI decision was correct, or that a trade was profitable. The detailed personas and workflows should be expanded here as the template gains more integrations.
+Concrete examples and two buildable programs for each profession are in [`docs/USE_CASES.md`](docs/USE_CASES.md).
 
 ## Payment Intent + HBAR transfer
 
