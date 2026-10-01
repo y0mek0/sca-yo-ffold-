@@ -87,7 +87,7 @@ export async function fetchSaucerSwapPoolSnapshot(
   const response = await fetchImpl(`${SAUCERSWAP_API}/pools/${poolId}`, {
     headers: {
       accept: 'application/json',
-      'user-agent': 'agentproof-hbar-template'
+      'user-agent': 'tracemark-template'
     }
   });
 

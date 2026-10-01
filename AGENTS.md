@@ -1,4 +1,4 @@
-# Agent instructions for AgentProof HBAR
+# Agent instructions for Tracemark
 
 Follow these rules when extending this template.
 

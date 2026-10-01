@@ -16,7 +16,7 @@ afterEach(async () => {
 
 describe('LocalProofIndex', () => {
   it('stores full off-chain events while keeping HCS messages separately hash-addressed', async () => {
-    tempDir = await mkdtemp(join(tmpdir(), 'agentproof-index-'));
+    tempDir = await mkdtemp(join(tmpdir(), 'tracemark-index-'));
     const index = new LocalProofIndex(join(tempDir, 'proofs.jsonl'));
     const sample = buildSampleProof('research_claim');
 

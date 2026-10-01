@@ -62,7 +62,7 @@ export async function fetchHtsTreasurySnapshot(
   const now = options.now ?? (() => new Date().toISOString());
   const tokenUrl = `${baseUrl}/api/v1/tokens/${encodeURIComponent(tokenId)}`;
   const tokenResponse = await fetchImpl(tokenUrl, {
-    headers: { accept: 'application/json', 'user-agent': 'agentproof-hbar-template' }
+    headers: { accept: 'application/json', 'user-agent': 'tracemark-template' }
   });
 
   if (!tokenResponse.ok) {
@@ -73,7 +73,7 @@ export async function fetchHtsTreasurySnapshot(
   const treasuryAccountId = requiredString(token.treasury_account_id, 'treasury_account_id');
   const balanceUrl = `${baseUrl}/api/v1/tokens/${encodeURIComponent(tokenId)}/balances?account.id=${encodeURIComponent(treasuryAccountId)}`;
   const balanceResponse = await fetchImpl(balanceUrl, {
-    headers: { accept: 'application/json', 'user-agent': 'agentproof-hbar-template' }
+    headers: { accept: 'application/json', 'user-agent': 'tracemark-template' }
   });
 
   if (!balanceResponse.ok) {

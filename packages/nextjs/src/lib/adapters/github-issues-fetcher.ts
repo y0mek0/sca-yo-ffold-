@@ -24,7 +24,7 @@ export async function fetchLatestOpenIssues(options: FetchLatestOpenIssuesOption
   const response = await fetchImpl(url, {
     headers: {
       accept: 'application/vnd.github+json',
-      'user-agent': 'agentproof-hbar-template'
+      'user-agent': 'tracemark-template'
     }
   });
 

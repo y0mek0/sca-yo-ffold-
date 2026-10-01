@@ -26,7 +26,7 @@ function getArg(name: string): string | undefined {
 async function main(): Promise<void> {
   const env = loadHederaEnv(process.cwd());
   const owner = getArg('--owner') ?? process.env.WATCHER_REPO_OWNER ?? 'y0mek0';
-  const repo = getArg('--repo') ?? process.env.WATCHER_REPO_NAME ?? 'sca-yo-ffold-';
+  const repo = getArg('--repo') ?? process.env.WATCHER_REPO_NAME ?? 'tracemark';
 
   const release = await fetchGitHubRelease({ owner, repo });
   const event = createReleaseWatcherProofEvent({

@@ -16,7 +16,7 @@ export async function fetchHbarPrice(options: FetchHbarPriceOptions = {}): Promi
   const now = options.now ?? (() => new Date().toISOString());
 
   const response = await fetchImpl(COINGECKO_URL, {
-    headers: { accept: 'application/json', 'user-agent': 'agentproof-hbar-template' }
+    headers: { accept: 'application/json', 'user-agent': 'tracemark-template' }
   });
 
   if (!response.ok) {

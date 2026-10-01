@@ -110,7 +110,7 @@ async function main(): Promise<void> {
   const proofCount = buildProofCount(proofs);
   checks.push(['Local proof index', true, formatProofCount(proofCount)]);
 
-  console.log(formatHeadline('AgentProof HBAR Doctor', { color }));
+  console.log(formatHeadline('Tracemark Doctor', { color }));
   console.log();
   for (const [name, ok, detail] of checks) {
     console.log(formatCheck(name, ok, detail, { color }));

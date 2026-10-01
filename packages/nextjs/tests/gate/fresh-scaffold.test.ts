@@ -23,7 +23,7 @@ function npm(args: string[], cwd: string): { status: number; stdout: string; std
 
 describe('fresh scaffold gate', () => {
   it('installs, lints, typechecks, tests, builds, and runs the doctor in a clean copy', async () => {
-    tempRoot = await mkdtemp(join(tmpdir(), 'agentproof-fresh-'));
+    tempRoot = await mkdtemp(join(tmpdir(), 'tracemark-fresh-'));
     const dest = join(tempRoot, 'app');
 
     // Copy the template without node_modules, .next, and .data artifacts.

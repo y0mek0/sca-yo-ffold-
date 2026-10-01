@@ -24,7 +24,7 @@ export type ProofEventInput = {
 };
 
 export type ProofEvent = {
-  schemaVersion: 'agentproof.v1';
+  schemaVersion: 'tracemark.v1';
   kind: ProofEventKind;
   actor: ProofActor;
   subject: ProofSubject;
@@ -38,7 +38,7 @@ export type ProofHash = {
 };
 
 export type HcsProofMessage = {
-  schemaVersion: 'agentproof.hcs.v1';
+  schemaVersion: 'tracemark.hcs.v1';
   eventSchemaVersion: ProofEvent['schemaVersion'];
   kind: ProofEventKind;
   subject: ProofSubject;
@@ -70,7 +70,7 @@ export function normalizeProofEvent(input: ProofEventInput): ProofEvent {
   assertNoUndefined(input);
 
   return {
-    schemaVersion: 'agentproof.v1',
+    schemaVersion: 'tracemark.v1',
     kind: input.kind,
     actor: toJsonValue(input.actor) as ProofActor,
     subject: toJsonValue(input.subject) as ProofSubject,
@@ -107,7 +107,7 @@ export function hashCanonicalJson(value: JsonValue): ProofHash {
 
 export function buildHcsProofMessage(input: { event: ProofEvent; eventHash: ProofHash }): HcsProofMessage {
   return {
-    schemaVersion: 'agentproof.hcs.v1',
+    schemaVersion: 'tracemark.hcs.v1',
     eventSchemaVersion: input.event.schemaVersion,
     kind: input.event.kind,
     subject: input.event.subject,

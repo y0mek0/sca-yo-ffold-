@@ -3,7 +3,7 @@ import type { ReactElement, ReactNode } from 'react';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'AgentProof HBAR',
+  title: 'Tracemark',
   description: 'HCS proof layer for AI, research, and document workflows on Hedera testnet.'
 };
 

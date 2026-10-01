@@ -10,7 +10,7 @@ describe('fetchLatestOpenIssues', () => {
     const calls: Array<{ url: string }> = [];
     const result = await fetchLatestOpenIssues({
       owner: 'y0mek0',
-      repo: 'sca-yo-ffold-',
+      repo: 'tracemark',
       limit: 2,
       fetchImpl: async (input) => {
         calls.push({ url: String(input) });
@@ -20,7 +20,7 @@ describe('fetchLatestOpenIssues', () => {
 
     expect(result).toHaveLength(2);
     expect(result[0].number).toBe(9);
-    expect(calls[0].url).toContain('repos/y0mek0/sca-yo-ffold-/issues');
+    expect(calls[0].url).toContain('repos/y0mek0/tracemark/issues');
     expect(calls[0].url).toContain('state=open');
   });
 

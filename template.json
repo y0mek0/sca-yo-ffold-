@@ -1,5 +1,5 @@
 {
-  "name": "AgentProof HBAR",
+  "name": "Tracemark",
   "description": "Scaffold-HBAR template for verifiable AI, research, and document workflows using HCS proof logs and Mirror Node verification.",
   "version": "0.1.0",
   "create-scaffold-hbar": {
@@ -41,7 +41,7 @@
     "outro": {
       "sections": [
         {
-          "title": "AgentProof HBAR next steps",
+          "title": "Tracemark next steps",
           "steps": [
             {
               "label": "Copy env placeholders",

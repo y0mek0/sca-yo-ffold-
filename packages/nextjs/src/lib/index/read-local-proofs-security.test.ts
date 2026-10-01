@@ -15,7 +15,7 @@ afterEach(async () => {
 
 describe('readLocalProofs security smoke', () => {
   it('ignores corrupt lines without throwing', async () => {
-    tempDir = await mkdtemp(join(tmpdir(), 'agentproof-corrupt-'));
+    tempDir = await mkdtemp(join(tmpdir(), 'tracemark-corrupt-'));
     const file = join(tempDir, 'proofs.jsonl');
     const good = JSON.stringify({ event: { subject: { id: 'a', type: 'b' }, kind: 'k' }, hash: { algorithm: 'sha256', digest: '1'.repeat(64) }, hcsMessage: { subject: { id: 'a', type: 'b' }, kind: 'k', hash: { algorithm: 'sha256', digest: '1'.repeat(64) } } });
     await writeFile(file, `${good}\n{not json\n${good}\n`, 'utf8');
@@ -26,7 +26,7 @@ describe('readLocalProofs security smoke', () => {
   });
 
   it('does not leak raw payload fields', async () => {
-    tempDir = await mkdtemp(join(tmpdir(), 'agentproof-leak-'));
+    tempDir = await mkdtemp(join(tmpdir(), 'tracemark-leak-'));
     const file = join(tempDir, 'proofs.jsonl');
     const secret = 'REDACTED_TEST_VALUE_0xabcdef0123456789';
     const record = {
@@ -42,7 +42,7 @@ describe('readLocalProofs security smoke', () => {
   });
 
   it('handles a very large file by reading up to bound', async () => {
-    tempDir = await mkdtemp(join(tmpdir(), 'agentproof-large-'));
+    tempDir = await mkdtemp(join(tmpdir(), 'tracemark-large-'));
     const file = join(tempDir, 'proofs.jsonl');
     const lines: string[] = [];
     for (let i = 0; i < 5_000; i += 1) {
@@ -65,7 +65,7 @@ describe('readLocalProofs security smoke', () => {
   });
 
   it('handles an empty file', async () => {
-    tempDir = await mkdtemp(join(tmpdir(), 'agentproof-empty-'));
+    tempDir = await mkdtemp(join(tmpdir(), 'tracemark-empty-'));
     const file = join(tempDir, 'proofs.jsonl');
     await writeFile(file, '', 'utf8');
 
@@ -73,7 +73,7 @@ describe('readLocalProofs security smoke', () => {
   });
 
   it('handles a file that contains only whitespace and blank lines', async () => {
-    tempDir = await mkdtemp(join(tmpdir(), 'agentproof-blank-'));
+    tempDir = await mkdtemp(join(tmpdir(), 'tracemark-blank-'));
     const file = join(tempDir, 'proofs.jsonl');
     await writeFile(file, '\n\n   \n', 'utf8');
 
@@ -81,7 +81,7 @@ describe('readLocalProofs security smoke', () => {
   });
 
   it('does not crash when entries are missing fields', async () => {
-    tempDir = await mkdtemp(join(tmpdir(), 'agentproof-missing-'));
+    tempDir = await mkdtemp(join(tmpdir(), 'tracemark-missing-'));
     const file = join(tempDir, 'proofs.jsonl');
     await writeFile(file, `${JSON.stringify({})}\n${JSON.stringify({ event: null })}\n`, 'utf8');
 

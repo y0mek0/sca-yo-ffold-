@@ -7,7 +7,7 @@ map, not a claim that a proof hash makes an external claim true.
 
 | Requirement | Evidence |
 |---|---|
-| External `create-scaffold-hbar` template | `npm create scaffold-hbar@latest -- agentproof-smoke --template y0mek0/sca-yo-ffold- --frontend nextjs-app --solidity-framework none --package-manager npm --network testnet --ci --skip-hedera-skills --skip-install` |
+| External `create-scaffold-hbar` template | `npm create scaffold-hbar@latest -- tracemark-smoke --template y0mek0/tracemark --frontend nextjs-app --solidity-framework none --package-manager npm --network testnet --ci --skip-hedera-skills --skip-install` |
 | Fresh install | `npm install --no-audit --no-fund` in a disposable generated project |
 | Fresh quality gates | `lint`, `typecheck`, `test`, `build`, and `doctor` all passed; 30 test files / 87 tests |
 | Required template files | `template.json`, `README.md`, `AGENTS.md`, and `LICENSE` are at repository root |
@@ -85,7 +85,7 @@ submission notes:
   log, Mirror Node is used for independent verification, and HBAR transfer execution
   is paired with intent/execution proofs.
 
-AgentProof proves that normalized data was recorded in a particular form and at a
+Tracemark proves that normalized data was recorded in a particular form and at a
 particular time. It does not by itself prove the truth of a claim, correctness of an
 AI decision, profitability, legal compliance, or completion of an intent that never
 received a successful Hedera receipt.

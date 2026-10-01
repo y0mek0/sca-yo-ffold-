@@ -1,5 +1,5 @@
 {
-  "name": "hedera-agent-proof-kit",
+  "name": "tracemark-hbar-template",
   "version": "0.1.0",
   "private": true,
   "description": "Scaffold-HBAR template for verifiable AI, research, and document workflows on Hedera HCS.",

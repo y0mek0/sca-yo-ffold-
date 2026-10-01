@@ -14,8 +14,8 @@ describe('cli-output', () => {
   });
 
   it('formats a headline with rule', () => {
-    const out = formatHeadline('AgentProof HBAR');
-    expect(out).toContain('AgentProof HBAR');
+    const out = formatHeadline('Tracemark');
+    expect(out).toContain('Tracemark');
     expect(out.split('\n').length).toBeGreaterThan(1);
   });
 

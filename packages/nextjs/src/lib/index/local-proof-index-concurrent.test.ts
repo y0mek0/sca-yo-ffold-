@@ -16,7 +16,7 @@ afterEach(async () => {
 
 describe('LocalProofIndex concurrent append', () => {
   it('preserves every entry when many appends happen at once', async () => {
-    tempDir = await mkdtemp(join(tmpdir(), 'agentproof-concurrent-'));
+    tempDir = await mkdtemp(join(tmpdir(), 'tracemark-concurrent-'));
     const file = join(tempDir, 'proofs.jsonl');
     const index = new LocalProofIndex(file);
 
@@ -27,7 +27,7 @@ describe('LocalProofIndex concurrent append', () => {
       actorId: `agent:concurrent-${i}`,
       subjectId: `decision:concurrent-${i}`
     }));
-    await Promise.all(samples.map((sample) => index.append({ event: sample, hash: { algorithm: 'sha256', digest: sample.subject.id }, hcsMessage: { schemaVersion: 'agentproof.hcs.v1', eventSchemaVersion: 'agentproof.v1', kind: 'ai_decision', subject: sample.subject, hash: { algorithm: 'sha256', digest: sample.subject.id }, metadata: sample.metadata } })));
+    await Promise.all(samples.map((sample) => index.append({ event: sample, hash: { algorithm: 'sha256', digest: sample.subject.id }, hcsMessage: { schemaVersion: 'tracemark.hcs.v1', eventSchemaVersion: 'tracemark.v1', kind: 'ai_decision', subject: sample.subject, hash: { algorithm: 'sha256', digest: sample.subject.id }, metadata: sample.metadata } })));
 
     const list = await index.list();
     expect(list).toHaveLength(N);

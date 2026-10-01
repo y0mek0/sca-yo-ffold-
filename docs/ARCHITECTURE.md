@@ -1,8 +1,8 @@
-# AgentProof HBAR: How It Works
+# Tracemark: How It Works
 
 ## The simple formula
 
-**An external source provides data. An adapter converts it into one stable format. AgentProof creates a digital fingerprint of that data. Hedera HCS records the fingerprint publicly. The full event stays in separate storage. Mirror Node later confirms that the fingerprint was recorded and has not changed.**
+**An external source provides data. An adapter converts it into one stable format. Tracemark creates a digital fingerprint of that data. Hedera HCS records the fingerprint publicly. The full event stays in separate storage. Mirror Node later confirms that the fingerprint was recorded and has not changed.**
 
 In short:
 
@@ -15,7 +15,7 @@ external data or action
 → Mirror Node verification
 ```
 
-AgentProof does not prove that an external source was correct. It proves exactly what data was recorded and when.
+Tracemark does not prove that an external source was correct. It proves exactly what data was recorded and when.
 
 ## Layers
 
@@ -42,7 +42,7 @@ The full event stays off-chain in the local JSONL index. A production applicatio
 
 ### HCS
 
-HCS is the public ordered proof log. AgentProof sends a compact message containing the hash and minimal metadata instead of a large payload.
+HCS is the public ordered proof log. Tracemark sends a compact message containing the hash and minimal metadata instead of a large payload.
 
 ### Mirror Node
 
@@ -73,4 +73,4 @@ payment intent
 
 ## Project boundaries
 
-AgentProof is not a trading bot, exchange, wallet, financial advisor, compliance SaaS product, or database. It does not execute swaps and does not prove that an AI decision was correct. It records input data, a decision, or an action result and makes that record independently verifiable.
+Tracemark is not a trading bot, exchange, wallet, financial advisor, compliance SaaS product, or database. It does not execute swaps and does not prove that an AI decision was correct. It records input data, a decision, or an action result and makes that record independently verifiable.

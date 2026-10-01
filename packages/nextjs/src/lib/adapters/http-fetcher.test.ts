@@ -7,7 +7,7 @@ describe('fetchGitHubRelease', () => {
     const payload = {
       tag_name: 'v0.1.0',
       name: 'Demo release',
-      html_url: 'https://github.com/y0mek0/sca-yo-ffold-/releases/tag/v0.1.0',
+      html_url: 'https://github.com/y0mek0/tracemark/releases/tag/v0.1.0',
       published_at: '2026-09-30T00:00:00Z',
       body: 'first',
       prerelease: false,
@@ -15,7 +15,7 @@ describe('fetchGitHubRelease', () => {
     };
     const result = await fetchGitHubRelease({
       owner: 'y0mek0',
-      repo: 'sca-yo-ffold-',
+      repo: 'tracemark',
       fetchImpl: async (input) => {
         calls.push({ url: String(input) });
         return new Response(JSON.stringify(payload), {
@@ -26,15 +26,15 @@ describe('fetchGitHubRelease', () => {
     });
 
     expect(result.tagName).toBe('v0.1.0');
-    expect(result.url).toBe('https://github.com/y0mek0/sca-yo-ffold-/releases/tag/v0.1.0');
-    expect(calls[0].url).toBe('https://api.github.com/repos/y0mek0/sca-yo-ffold-/releases/latest');
+    expect(result.url).toBe('https://github.com/y0mek0/tracemark/releases/tag/v0.1.0');
+    expect(calls[0].url).toBe('https://api.github.com/repos/y0mek0/tracemark/releases/latest');
   });
 
   it('reports an HTTP error cleanly', async () => {
     await expect(
       fetchGitHubRelease({
         owner: 'y0mek0',
-        repo: 'sca-yo-ffold-',
+        repo: 'tracemark',
         fetchImpl: async () => new Response('boom', { status: 404 })
       })
     ).rejects.toThrow(/http 404/i);
@@ -44,7 +44,7 @@ describe('fetchGitHubRelease', () => {
     await expect(
       fetchGitHubRelease({
         owner: 'y0mek0',
-        repo: 'sca-yo-ffold-',
+        repo: 'tracemark',
         fetchImpl: async () => {
           throw new Error('EAI_AGAIN');
         }

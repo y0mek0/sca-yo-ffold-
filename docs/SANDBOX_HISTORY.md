@@ -1,11 +1,11 @@
 # Sandbox Exercise History
 
-This file records how `hedera-agent-proof-kit` was actually exercised end-to-end
+This file records how `tracemark-template` was actually exercised end-to-end
 against real Hedera testnet before the bounty submission. Every entry includes
 the real command output and the verification gate it passed.
 
 The goal was to answer: **how would a real developer use the template right after
-`npm create scaffold-hbar@latest -- --template y0mek0/sca-yo-ffold-`?**
+`npm create scaffold-hbar@latest -- --template y0mek0/tracemark`?**
 
 ## Sandbox A — clean install, demo mode
 
@@ -14,13 +14,13 @@ Goal: prove the template boots and gives honest feedback when `.env.local` is mi
 Setup:
 
 ```bash
-mv hedera-agent-proof-kit/.env.local .env.local.backup
+mv tracemark-template/.env.local .env.local.backup
 ```
 
 Result:
 
 ```text
-AgentProof HBAR Doctor
+Tracemark Doctor
 OK  Node version             v24.11.1 >= 20.18.3
 OK  HEDERA_NETWORK           testnet
 WARN HEDERA_OPERATOR_ID       missing; demo mode
@@ -46,7 +46,7 @@ Setup: `cp .env.local.backup .env.local`
 Result:
 
 ```text
-AgentProof HBAR Doctor
+Tracemark Doctor
 OK  Node version             v24.11.1 >= 20.18.3
 OK  HEDERA_NETWORK           testnet
 OK  HEDERA_OPERATOR_ID       set
@@ -160,7 +160,7 @@ HEDERA_MIRROR_NODE_URL=https://testnet.mirrornode.hedera.com
 Result:
 
 ```text
-AgentProof HBAR Doctor
+Tracemark Doctor
 OK  Node version             v24.11.1 >= 20.18.3
 OK  HEDERA_NETWORK           testnet
 OK  HEDERA_OPERATOR_ID       set
@@ -194,14 +194,14 @@ e4b4e11 docs: update bounty evidence to latest verified sequence
 8bea132 feat: real HCS submit and Mirror verify on testnet
 0a30086 feat: add local index and core adapters
 1bf44a3 feat: add deterministic ProofEvent hashing
-cd6cf1b feat: scaffold AgentProof HBAR template skeleton
+cd6cf1b feat: scaffold Tracemark template skeleton
 f97eba6 chore: plan_approved
 ```
 
 Public repo:
 
 ```text
-https://github.com/y0mek0/sca-yo-ffold-
+https://github.com/y0mek0/tracemark
 ```
 
 ## Sandbox G — token association check via Mirror Node
@@ -215,7 +215,7 @@ Setup: real `.env.local` with operator `0.0.10380366`, default token
 Result:
 
 ```text
-AgentProof HBAR Doctor
+Tracemark Doctor
 OK  Node version             v24.11.1 >= 20.18.3
 OK  HEDERA_NETWORK           testnet
 OK  HEDERA_OPERATOR_ID       set
@@ -282,7 +282,7 @@ End result:
 
 ```text
 ✔ Create project directory
-✔ Creating a new Scaffold-HBAR app in myagentproof
+✔ Creating a new Scaffold-HBAR app in mytracemark
 ✔ Initializing Git repository
 
 yarn install    OK

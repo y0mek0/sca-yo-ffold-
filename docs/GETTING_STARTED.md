@@ -1,4 +1,4 @@
-# AgentProof HBAR: Start and Verify from Scratch
+# Tracemark: Start and Verify from Scratch
 
 ## 1. Requirements
 

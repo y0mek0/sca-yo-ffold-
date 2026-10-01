@@ -1,4 +1,4 @@
-# AgentProof HBAR: Use Cases and Buildable Programs
+# Tracemark: Use Cases and Buildable Programs
 
 All six professions use the same proof layer. They differ in the data sources they read and the actions they take after analysis.
 

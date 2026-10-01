@@ -1,12 +1,12 @@
-# AgentProof HBAR
+# Tracemark
 
 A Hedera-native proof layer for AI decisions, research, payments, and verifiable ecosystem data.
 
-AgentProof hashes important outputs, anchors the proof to HCS, stores the full payload off-chain in a local JSONL index, and verifies it through the Hedera Mirror Node. The template ships with a setup Doctor, three working Core+ adapters, four roadmap adapters as typed factories, a polished proof-index UI, and a GitHub release watcher that proves real HTTP → HCS → Mirror Node round-trips end to end.
+Tracemark hashes important outputs, anchors the proof to HCS, stores the full payload off-chain in a local JSONL index, and verifies it through the Hedera Mirror Node. The template ships with a setup Doctor, three working Core+ adapters, four roadmap adapters as typed factories, a polished proof-index UI, and a GitHub release watcher that proves real HTTP → HCS → Mirror Node round-trips end to end.
 
 ## Why this template
 
-Most agents act. Almost none leave a public, immutable record of what they did, in what order, with what input. Hedera Consensus Service is purpose-built for that — ordered, timestamped, cheap, mirrored. AgentProof is the smallest scaffolding that turns "the agent said X" into "HCS proves the agent said X at consensus time T, and the full evidence stays in your own storage".
+Most agents act. Almost none leave a public, immutable record of what they did, in what order, with what input. Hedera Consensus Service is purpose-built for that — ordered, timestamped, cheap, mirrored. Tracemark is the smallest scaffolding that turns "the agent said X" into "HCS proves the agent said X at consensus time T, and the full evidence stays in your own storage".
 
 ```text
 external data or action
@@ -17,7 +17,7 @@ external data or action
 → Mirror Node verification
 ```
 
-In plain English: AgentProof shows what data the system saw, which decision or action it recorded, and when that happened. It does not prove that an external source was correct or that the AI made the right decision.
+In plain English: Tracemark shows what data the system saw, which decision or action it recorded, and when that happened. It does not prove that an external source was correct or that the AI made the right decision.
 
 More detail: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md), [`docs/GETTING_STARTED.md`](docs/GETTING_STARTED.md), and [`docs/USE_CASES.md`](docs/USE_CASES.md).
 
@@ -120,7 +120,7 @@ The `add:adapter` command scaffolds a new adapter file under `packages/nextjs/sr
 
 - **Protocol researcher / crypto data analyst** — combine GitHub activity, HBAR price, SaucerSwap market snapshots and HTS token state.
 - **DAO treasury / grants / governance operations** — anchor proposals, treasury snapshots, rationale, approvals and payments.
-- **Crypto risk manager / market operations** — record market signals and risk decisions; AgentProof does not execute trades.
+- **Crypto risk manager / market operations** — record market signals and risk decisions; Tracemark does not execute trades.
 
 Concrete examples and two buildable programs for each profession are in [`docs/USE_CASES.md`](docs/USE_CASES.md).
 
@@ -167,7 +167,7 @@ The following adapters ship as typed factories so developers can wire them in wi
 The Doctor validates more than a syntax check. It talks to the Hedera Mirror Node to confirm token association and rejects misconfiguration before any user transaction is signed:
 
 ```text
-AgentProof HBAR Doctor
+Tracemark Doctor
 ──────────────────────────
  OK  Node version             v24.11.1 >= 20.18.3
  OK  HEDERA_NETWORK           testnet
@@ -187,7 +187,7 @@ The submit script returns a structured JSON error instead of crashing on bad inp
 
 ## Important pattern
 
-HCS is not used as a database. AgentProof stores only proof hashes and minimal metadata on HCS. Full payloads stay in the local `.data/proofs.jsonl` index or in your own storage.
+HCS is not used as a database. Tracemark stores only proof hashes and minimal metadata on HCS. Full payloads stay in the local `.data/proofs.jsonl` index or in your own storage.
 
 The HCS message intentionally excludes raw payload fields like source text, file names, private notes, or evidence bundles. It keeps only:
 

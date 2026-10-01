@@ -20,8 +20,8 @@ describe('HCS proof message envelope', () => {
     const serialized = JSON.stringify(message);
 
     expect(message).toEqual({
-      schemaVersion: 'agentproof.hcs.v1',
-      eventSchemaVersion: 'agentproof.v1',
+      schemaVersion: 'tracemark.hcs.v1',
+      eventSchemaVersion: 'tracemark.v1',
       kind: 'document_hash',
       subject: { id: 'document:submission-deck', type: 'document' },
       hash: eventHash,

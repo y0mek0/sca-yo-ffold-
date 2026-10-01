@@ -22,33 +22,33 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd hedera-agent-proof-kit
+          cd .
           npm ci --no-audit --no-fund
 
       - name: Lint
-        working-directory: hedera-agent-proof-kit
+        working-directory: .
         run: npm run lint
 
       - name: Typecheck
-        working-directory: hedera-agent-proof-kit
+        working-directory: .
         run: npm run typecheck
 
       - name: Tests
-        working-directory: hedera-agent-proof-kit
+        working-directory: .
         run: npm run test
 
       - name: Build
-        working-directory: hedera-agent-proof-kit
+        working-directory: .
         run: npm run build
 
       - name: Doctor (demo mode, no env)
-        working-directory: hedera-agent-proof-kit
+        working-directory: .
         run: npm run doctor
 
       - name: Audit sample
-        working-directory: hedera-agent-proof-kit
+        working-directory: .
         run: npm run audit:sample
 
       - name: Verify sample (off-chain only)
-        working-directory: hedera-agent-proof-kit
+        working-directory: .
         run: npm run verify:sample

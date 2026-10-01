@@ -15,7 +15,7 @@ afterEach(async () => {
 
 describe('loadHederaEnv', () => {
   it('loads .env.local without printing secrets and accepts HEDERA_TOPIC_ID', async () => {
-    tempDir = await mkdtemp(join(tmpdir(), 'agentproof-env-'));
+    tempDir = await mkdtemp(join(tmpdir(), 'tracemark-env-'));
     await writeFile(join(tempDir, '.env.local'), [
       'HEDERA_NETWORK=testnet',
       'HEDERA_OPERATOR_ID=0.0.123',
@@ -34,7 +34,7 @@ describe('loadHederaEnv', () => {
   });
 
   it('also accepts legacy HEDERA_HCS_TOPIC_ID', async () => {
-    tempDir = await mkdtemp(join(tmpdir(), 'agentproof-env-'));
+    tempDir = await mkdtemp(join(tmpdir(), 'tracemark-env-'));
     await writeFile(join(tempDir, '.env.local'), [
       'HEDERA_OPERATOR_ID=0.0.123',
       'HEDERA_OPERATOR_KEY=302e020100',
@@ -45,7 +45,7 @@ describe('loadHederaEnv', () => {
   });
 
   it('finds .env.local in a parent workspace directory', async () => {
-    tempDir = await mkdtemp(join(tmpdir(), 'agentproof-env-'));
+    tempDir = await mkdtemp(join(tmpdir(), 'tracemark-env-'));
     const childDir = join(tempDir, 'packages', 'nextjs');
     await writeFile(join(tempDir, '.env.local'), [
       'HEDERA_OPERATOR_ID=0.0.123',

@@ -44,7 +44,7 @@ export default async function HomePage({ searchParams }: { searchParams: IndexSe
       <section className="panel hero">
         <div className="brand-row">
           <span className="brand-mark" aria-hidden="true">▣</span>
-          <span className="brand-name">AgentProof HBAR</span>
+          <span className="brand-name">Tracemark</span>
           <span className="brand-tagline">HCS proof log for AI, research, and documents</span>
         </div>
         <h1>Anchor agent decisions to Hedera in one command.</h1>

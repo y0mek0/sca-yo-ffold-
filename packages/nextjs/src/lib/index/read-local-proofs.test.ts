@@ -15,16 +15,16 @@ afterEach(async () => {
 
 describe('readLocalProofs', () => {
   it('returns an empty array when no index file exists yet', async () => {
-    tempDir = await mkdtemp(join(tmpdir(), 'agentproof-read-'));
+    tempDir = await mkdtemp(join(tmpdir(), 'tracemark-read-'));
     expect(await readLocalProofs(join(tempDir, 'proofs.jsonl'))).toEqual([]);
   });
 
   it('returns newest-first proof summaries without leaking raw payload fields', async () => {
-    tempDir = await mkdtemp(join(tmpdir(), 'agentproof-read-'));
+    tempDir = await mkdtemp(join(tmpdir(), 'tracemark-read-'));
     const file = join(tempDir, 'proofs.jsonl');
     const first = {
       event: {
-        schemaVersion: 'agentproof.v1',
+        schemaVersion: 'tracemark.v1',
         kind: 'research_claim',
         actor: { id: 'agent:a', type: 'ai_agent' },
         subject: { id: 'claim:a', type: 'claim' },
@@ -33,8 +33,8 @@ describe('readLocalProofs', () => {
       },
       hash: { algorithm: 'sha256', digest: '1'.repeat(64) },
       hcsMessage: {
-        schemaVersion: 'agentproof.hcs.v1',
-        eventSchemaVersion: 'agentproof.v1',
+        schemaVersion: 'tracemark.hcs.v1',
+        eventSchemaVersion: 'tracemark.v1',
         kind: 'research_claim',
         subject: { id: 'claim:a', type: 'claim' },
         hash: { algorithm: 'sha256', digest: '1'.repeat(64) },
