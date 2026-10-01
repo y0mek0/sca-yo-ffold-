@@ -7,9 +7,9 @@ map, not a claim that a proof hash makes an external claim true.
 
 | Requirement | Evidence |
 |---|---|
-| External `create-scaffold-hbar` template | `npm create scaffold-hbar@latest -- tracemark-smoke --template y0mek0/tracemark --frontend nextjs-app --solidity-framework none --package-manager npm --network testnet --ci --skip-hedera-skills --skip-install` |
+| External `create-scaffold-hbar` template | `npm create scaffold-hbar@latest -- tracemark-smoke --template y0mek0/tracemark --frontend nextjs-app --solidity-framework hardhat --package-manager npm --network testnet --ci --skip-hedera-skills --skip-install` |
 | Fresh install | `npm install --no-audit --no-fund` in a disposable generated project |
-| Fresh quality gates | `lint`, `typecheck`, `test`, `build`, and `doctor` all passed; 30 test files / 87 tests |
+| Fresh quality gates | `lint`, `typecheck`, `test`, `build`, and `doctor` all passed; 31 test files / 91 tests, plus 2 Hardhat contract tests |
 | Required template files | `template.json`, `README.md`, `AGENTS.md`, and `LICENSE` are at repository root |
 | No committed secrets | `.env*` is ignored except `.env.example`; credentials stayed local |
 | Demo without credentials | Fresh `doctor` reports demo mode and zero local proofs without failing |

@@ -4,7 +4,7 @@ This checklist is based on the bounty brief supplied for this submission and the
 
 | Requirement | Repository proof | Verification |
 | --- | --- | --- |
-| Public reusable template | Root `package.json`, `template.json`, `README.md`, `AGENTS.md`, `LICENSE`, `packages/nextjs/` | Fresh `create-scaffold-hbar` regression |
+| Public reusable template | Root `package.json`, `template.json`, `README.md`, `AGENTS.md`, `LICENSE`, `packages/nextjs/`, `packages/hardhat/` | Fresh `create-scaffold-hbar` regression |
 | Valid template manifest | `template.json` declares Next.js, npm, Node `>=20.18.3`, Hedera env vars | Manifest validation and fresh scaffold |
 | Hedera service | HCS proof log, Hedera SDK submit scripts, Mirror Node verification, HTS read-only snapshot | Real testnet sequences and Mirror hash match |
 | Real ecosystem value | GitHub, CoinGecko, SaucerSwap, HTS treasury snapshots | Watcher/adapters and live HCS evidence |

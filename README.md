@@ -30,7 +30,8 @@ More detail: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md), [`docs/GETTING_STAR
 | Core+ roadmap factories | Browser Action, Payment Intent, Watcher Signal, RAG Memory typed factories | `src/lib/adapters/roadmap.ts` |
 | Real integrations | GitHub release watcher, GitHub issues watcher, HBAR price watcher (CoinGecko), SaucerSwap read-only pool snapshot, HTS treasury/token snapshot, and Payment Intent + real HBAR transfer — real testnet sequences | `src/lib/adapters/http-fetcher.ts`, `release-watcher.ts`, `github-issues-fetcher.ts`, `coingecko-fetcher.ts`, `price-watcher.ts`, `saucerswap-snapshot.ts`, `hts-treasury-snapshot.ts`, `payment-intent-execution.ts`, `scripts/watch-*.ts`, `scripts/payment-intent-hbar.ts` |
 | UI | Hero dashboard, proof index with kind filter, JSON APIs, colorised CLI output | `src/app/page.tsx`, `proofs/page.tsx`, `api/proofs`, `src/lib/cli/cli-output.ts` |
-| CI | GitHub Actions pipeline with `lint / typecheck / test / build / doctor / audit / verify` | `.github/workflows/ci.yml` |
+| Contracts | Optional Solidity receipt registry with Hardhat compile/test flow | `packages/hardhat/contracts/TracemarkRegistry.sol`, `packages/hardhat/test/TracemarkRegistry.test.js` |
+| Validation | Local quality gate with `lint / typecheck / test / build / doctor / audit / verify` | root `package.json` scripts |
 | Docs | `README.md`, `AGENTS.md`, `docs/ARCHITECTURE.md`, `docs/GETTING_STARTED.md`, `docs/USE_CASES.md`, `docs/BOUNTY_CHECKLIST.md`, `docs/SANDBOX_HISTORY.md`, `docs/BOUNTY_EVIDENCE.md` | repo root |
 
 ## Quickstart
@@ -40,6 +41,8 @@ npm install
 cp .env.example .env.local
 # Fill HEDERA_OPERATOR_ID, HEDERA_OPERATOR_KEY, HEDERA_TOPIC_ID
 npm run doctor
+npm run contracts:compile
+npm run contracts:test
 npm run dev
 ```
 

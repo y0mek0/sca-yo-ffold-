@@ -5,7 +5,8 @@
   "description": "Scaffold-HBAR template for verifiable AI, research, and document workflows on Hedera HCS.",
   "license": "MIT",
   "workspaces": [
-    "packages/nextjs"
+    "packages/nextjs",
+    "packages/hardhat"
   ],
   "scripts": {
     "dev": "npm run dev -w packages/nextjs",
@@ -16,6 +17,8 @@
     "doctor": "npm run doctor -w packages/nextjs",
     "audit:sample": "npm run audit:sample -w packages/nextjs",
     "verify:sample": "npm run verify:sample -w packages/nextjs",
+    "contracts:compile": "npm run compile -w packages/hardhat",
+    "contracts:test": "npm run test -w packages/hardhat",
     "hcs:submit": "npm run hcs:submit -w packages/nextjs",
     "mirror:verify": "npm run mirror:verify -w packages/nextjs --",
     "watch:github-release": "npm run watch:github-release -w packages/nextjs --",

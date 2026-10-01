@@ -8,12 +8,12 @@
     },
     "capabilities": {
       "frontend": ["nextjs-app"],
-      "solidityFramework": ["none"],
+      "solidityFramework": ["hardhat"],
       "packageManager": ["npm"]
     },
     "defaults": {
       "frontend": "nextjs-app",
-      "solidityFramework": "none",
+      "solidityFramework": "hardhat",
       "packageManager": "npm"
     },
     "envVars": [
