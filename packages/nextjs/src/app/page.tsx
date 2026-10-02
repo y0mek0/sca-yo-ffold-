@@ -147,8 +147,8 @@ npm run mirror:verify -- --sequence <N>`}
           </article>
         ) : (
           <ul className="proof-list">
-            {filtered.slice(0, 5).map((proof: LocalProofSummary) => (
-              <li className="proof-card" key={proof.digest}>
+            {filtered.slice(0, 5).map((proof: LocalProofSummary, index: number) => (
+              <li className="proof-card" key={`${proof.kind}:${proof.adapter ?? 'core'}:${proof.subjectType}:${proof.subjectId}:${proof.digest}:${index}`}>
                 <header className="proof-card-head">
                   <span className="kind-pill">{proof.kind}</span>
                   {proof.adapter ? <span className="adapter-pill">{proof.adapter}</span> : null}

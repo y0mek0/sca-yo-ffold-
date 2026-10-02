@@ -1,34 +1,35 @@
 :root {
-  color-scheme: dark;
-  --bg: #070807;
-  --panel: #101310;
-  --panel-2: #0c0e0c;
-  --line: #2c342b;
-  --line-soft: #1f251d;
-  --text: #f4f6ec;
-  --muted: #9ca893;
-  --muted-2: #6f7868;
-  --accent: #d7ff4a;
-  --accent-soft: rgba(215, 255, 74, 0.12);
-  --warn: #ffcf66;
-  --error: #ff8585;
-  --radius: 10px;
-  --shadow-soft: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 18px 40px rgba(0, 0, 0, 0.35);
+  color-scheme: light;
+  --bg: #e8e4da;
+  --panel: #f4f1e9;
+  --panel-2: #eeeae0;
+  --line: #b9b2a5;
+  --line-soft: #d5cfc2;
+  --text: #171716;
+  --muted: #5f5b53;
+  --muted-2: #817a70;
+  --accent: #a9281d;
+  --accent-soft: rgba(169, 40, 29, 0.09);
+  --warn: #8b5e16;
+  --error: #a9281d;
+  --radius: 0;
+  --shadow-soft: none;
 }
 
 * {
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   background: var(--bg);
   color: var(--text);
 }
 
 body {
   margin: 0;
-  font-family: 'SF Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
-  font-feature-settings: 'ss01', 'cv11';
+  font-family: Arial, Helvetica, sans-serif;
+  font-feature-settings: 'kern', 'liga';
   -webkit-font-smoothing: antialiased;
   line-height: 1.55;
   min-height: 100vh;
@@ -62,16 +63,17 @@ main {
 .panel {
   background: var(--panel);
   border: 1px solid var(--line);
-  border-radius: var(--radius);
+  border-top: 4px solid var(--text);
+  border-radius: 0;
   padding: 32px;
-  box-shadow: var(--shadow-soft);
+  box-shadow: none;
 }
 
 .panel.hero {
   background:
-    radial-gradient(900px 200px at 0% 0%, rgba(215, 255, 74, 0.08), transparent 60%),
-    radial-gradient(600px 200px at 100% 0%, rgba(215, 255, 74, 0.04), transparent 60%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.38), transparent 34%),
     var(--panel);
+  border-top-color: var(--accent);
 }
 
 .section-head {
@@ -81,20 +83,25 @@ main {
   gap: 24px;
   margin-bottom: 24px;
   flex-wrap: wrap;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 14px;
 }
 
 .section-head h2 {
+  font-family: Georgia, 'Times New Roman', serif;
   font-size: 22px;
   margin: 6px 0 0;
   line-height: 1.2;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.025em;
+  font-weight: 700;
 }
 
 .eyebrow {
   color: var(--accent);
   text-transform: uppercase;
-  letter-spacing: 0.16em;
-  font-size: 11px;
+  letter-spacing: 0.18em;
+  font-family: 'Arial Narrow', Arial, sans-serif;
+  font-size: 10px;
   font-weight: 700;
 }
 
@@ -102,9 +109,11 @@ main {
   display: flex;
   align-items: center;
   gap: 12px;
-  font-size: 13px;
+  font-size: 12px;
   margin-bottom: 28px;
   color: var(--muted);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 12px;
 }
 
 .brand-mark {
@@ -114,36 +123,41 @@ main {
   width: 22px;
   height: 22px;
   background: var(--accent);
-  color: #0b0d08;
-  border-radius: 5px;
+  color: #f4f1e9;
+  border-radius: 0;
   font-size: 12px;
   line-height: 1;
 }
 
 .brand-name {
   color: var(--text);
+  font-family: Georgia, 'Times New Roman', serif;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .brand-tagline {
   color: var(--muted);
+  font-family: 'Arial Narrow', Arial, sans-serif;
 }
 
 h1 {
+  font-family: Georgia, 'Times New Roman', serif;
   font-size: clamp(36px, 6vw, 64px);
-  line-height: 1.05;
-  letter-spacing: -0.025em;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
   margin: 0 0 16px;
   font-weight: 700;
   color: var(--text);
+  max-width: 12ch;
 }
 
 p.lede {
   color: var(--muted);
-  font-size: 15px;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 16px;
   max-width: 56ch;
   margin: 0 0 24px;
 }
@@ -160,13 +174,14 @@ p.lede {
   align-items: center;
   gap: 8px;
   padding: 10px 16px;
-  border-radius: 6px;
-  font-size: 13px;
+  border-radius: 0;
+  font-family: 'Arial Narrow', Arial, sans-serif;
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   border: 1px solid transparent;
-  transition: transform 120ms ease, background 160ms ease;
+  transition: transform 120ms ease, background 160ms ease, color 160ms ease;
 }
 
 .btn:hover {
@@ -176,34 +191,36 @@ p.lede {
 
 .btn-primary {
   background: var(--accent);
-  color: #0b0d08;
+  color: #f4f1e9;
 }
 
 .btn-primary:hover {
-  background: #c8f02e;
+  background: #861d16;
 }
 
 .btn-ghost {
   background: transparent;
   color: var(--text);
-  border-color: var(--line);
+  border-color: var(--text);
 }
 
 .btn-ghost:hover {
   border-color: var(--accent);
+  color: var(--accent);
 }
 
 .cli-snippet {
   margin: 0;
   padding: 18px 20px;
   background: var(--panel-2);
-  border: 1px solid var(--line-soft);
-  border-radius: 8px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent);
+  border-radius: 0;
   font-size: 13px;
   line-height: 1.7;
   color: var(--muted);
   overflow-x: auto;
-  font-family: inherit;
+  font-family: 'Courier New', Courier, monospace;
 }
 
 .cli-snippet::before {
@@ -224,21 +241,23 @@ p.lede {
 
 .card {
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 0;
   padding: 18px;
   background: var(--panel-2);
   display: flex;
   flex-direction: column;
   gap: 8px;
-  transition: border-color 160ms ease;
+  transition: border-color 160ms ease, background 160ms ease;
 }
 
 .card:hover {
   border-color: var(--accent);
+  background: var(--panel);
 }
 
 .card strong {
-  font-size: 14px;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 16px;
   color: var(--text);
 }
 
@@ -258,13 +277,15 @@ p.lede {
   position: absolute;
   top: 12px;
   right: 12px;
+  font-family: 'Arial Narrow', Arial, sans-serif;
   font-size: 10px;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--accent);
-  background: var(--accent-soft);
-  padding: 3px 7px;
-  border-radius: 999px;
+  background: transparent;
+  padding: 2px 5px;
+  border-radius: 0;
+  border-bottom: 1px solid var(--accent);
 }
 
 .empty-card strong {
@@ -275,7 +296,7 @@ p.lede {
   background: var(--panel-2);
   border: 1px solid var(--line-soft);
   padding: 2px 6px;
-  border-radius: 4px;
+  border-radius: 0;
   color: var(--accent);
 }
 
@@ -289,11 +310,16 @@ p.lede {
 
 .proof-card {
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-left: 4px solid var(--text);
+  border-radius: 0;
   padding: 18px;
   background: var(--panel-2);
   display: grid;
   gap: 10px;
+}
+
+.proof-card:hover {
+  border-left-color: var(--accent);
 }
 
 .proof-card-head {
@@ -306,18 +332,19 @@ p.lede {
 .kind-pill,
 .adapter-pill,
 .hash-pill {
+  font-family: 'Arial Narrow', Arial, sans-serif;
   font-size: 10px;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   padding: 3px 8px;
-  border-radius: 999px;
+  border-radius: 0;
   border: 1px solid var(--line);
 }
 
 .kind-pill {
   color: var(--accent);
   border-color: var(--accent);
-  background: var(--accent-soft);
+  background: transparent;
 }
 
 .adapter-pill {
@@ -343,7 +370,7 @@ p.lede {
   color: var(--muted-2);
   font-size: 12px;
   word-break: break-all;
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-family: 'Courier New', Courier, monospace;
 }
 
 .proof-card-desc {
@@ -354,8 +381,9 @@ p.lede {
 
 .proof-card-link {
   align-self: flex-start;
+  font-family: 'Arial Narrow', Arial, sans-serif;
   font-size: 12px;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   border-bottom: 1px solid var(--line);
   padding-bottom: 2px;
@@ -372,12 +400,13 @@ p.lede {
 }
 
 .filter-chip {
+  font-family: 'Arial Narrow', Arial, sans-serif;
   font-size: 11px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 6px 12px;
   border: 1px solid var(--line);
-  border-radius: 999px;
+  border-radius: 0;
   color: var(--muted);
 }
 
@@ -389,12 +418,13 @@ p.lede {
 
 .filter-chip.is-active {
   background: var(--accent);
-  color: #0b0d08;
+  color: #f4f1e9;
   border-color: var(--accent);
 }
 
 .meta {
   color: var(--muted-2);
+  font-family: 'Arial Narrow', Arial, sans-serif;
   font-size: 12px;
   margin: 0;
 }
@@ -405,5 +435,5 @@ p.lede {
 }
 
 code {
-  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: 'Courier New', Courier, monospace;
 }

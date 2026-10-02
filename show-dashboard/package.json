@@ -1,0 +1,17 @@
+{
+  "name": "tracemark-demo-shell",
+  "private": true,
+  "main": "electron-main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "check": "node --check electron-main.cjs && node --check electron-preload.cjs && node --check electron-renderer.js"
+  },
+  "devDependencies": {
+    "electron": "^44.5.1"
+  },
+  "dependencies": {
+    "@xterm/xterm": "^6.0.0",
+    "@xterm/addon-fit": "^0.11.0",
+    "node-pty": "^1.1.0"
+  }
+}

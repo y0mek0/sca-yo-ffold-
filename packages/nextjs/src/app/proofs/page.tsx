@@ -25,11 +25,11 @@ export default async function ProofsPage(): Promise<ReactElement> {
   return (
     <main>
       <section className="panel">
-        <div className="eyebrow">Local proof index</div>
+        <div className="eyebrow">Proof log</div>
         <h1>Proofs</h1>
         <p className="lede">
-          Each entry is a proof that was hashed, signed by HCS, and indexed locally.
-          Raw payloads stay in <code>.data/proofs.jsonl</code>; the HCS topic stores only the digest.
+          These are the records published by the app. The full data stays in <code>.data/proofs.jsonl</code>.
+          Hedera keeps the hash.
         </p>
         <div className="cta-row">
           <Link className="btn btn-ghost" href="/">Back home</Link>
@@ -40,8 +40,8 @@ export default async function ProofsPage(): Promise<ReactElement> {
       <section className="panel">
         <header className="section-head">
           <div>
-            <div className="eyebrow">List</div>
-            <h2>{proofs.length === 0 ? 'No proofs yet.' : `${proofs.length} proof${proofs.length === 1 ? '' : 's'} on file.`}</h2>
+            <div className="eyebrow">Recent records</div>
+            <h2>{proofs.length === 0 ? 'No records yet.' : `${proofs.length} record${proofs.length === 1 ? '' : 's'} on file.`}</h2>
           </div>
           {kinds.length > 0 ? (
             <p className="meta">{kinds.length} kind{kinds.length === 1 ? '' : 's'} represented</p>
@@ -49,16 +49,15 @@ export default async function ProofsPage(): Promise<ReactElement> {
         </header>
         {proofs.length === 0 ? (
           <article className="card empty-card">
-            <strong>Run npm run hcs:submit to publish the first proof.</strong>
+            <strong>Run npm run hcs:submit to add the first record.</strong>
             <p>
-              The list refreshes every request. After each submit the new entry
-              shows up here with its kind, hash, and HashScan link.
+              After you publish one, it will show up here with its type, hash, and HashScan link.
             </p>
           </article>
         ) : (
           <ul className="proof-list">
-            {proofs.map((proof) => (
-              <li className="proof-card" key={proof.digest}>
+            {proofs.map((proof, index: number) => (
+              <li className="proof-card" key={`${proof.kind}:${proof.adapter ?? 'core'}:${proof.subjectType}:${proof.subjectId}:${proof.digest}:${index}`}>
                 <header className="proof-card-head">
                   <span className="kind-pill">{proof.kind}</span>
                   {proof.adapter ? <span className="adapter-pill">{proof.adapter}</span> : null}
