@@ -73,7 +73,7 @@ async function waitForDemoWeb() {
 async function waitForApp() {
   try { const response = await fetch('http://127.0.0.1:3000/api/doctor'); if (response.ok) return true; } catch {}
   const nextCli = path.join(REPO, 'node_modules', 'next', 'dist', 'bin', 'next');
-  appProcess = spawn(process.execPath, [nextCli, 'dev'], { cwd: path.join(REPO, 'packages', 'nextjs'), env: process.env, windowsHide: true, stdio: 'ignore', detached: true });
+  appProcess = spawn(process.execPath, [nextCli, 'dev'], { cwd: path.join(REPO, 'packages', 'nextjs'), env: process.env, windowsHide: true, detached: false, stdio: 'ignore' });
   appProcess.unref();
   for (let i = 0; i < 45; i += 1) {
     await sleep(1000);

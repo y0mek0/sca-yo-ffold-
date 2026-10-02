@@ -56,7 +56,7 @@ function eventFor(s) {
   if (s.stage === 'submitted') return { label: s.active || 'SUBMITTED', text: 'Hedera returned a new sequence. Opening the proof page.', colour: 'green' };
   if (s.stage === 'verified') return { label: s.active || 'VERIFIED', text: 'The public record has the same fingerprint as the local record.', colour: 'green' };
   if (s.stage === 'infographic') return { label: 'FINAL MAP', text: 'The records are ready. Opening the workflow page.', colour: 'blue' };
-  if (s.stage === 'complete') return { label: 'COMPLETE', text: 'The run is complete. Source, Hedera receipt, and public check are ready.', colour: 'green' };
+  if (s.stage === 'complete') return { label: 'SHARED PROOF LAYER', text: 'The two workflows used different sources and adapters, but the proof layer stayed the same: normalized records, SHA-256 fingerprints, HCS anchors, and Mirror checks.', colour: 'green' };
   return { label: 'WAITING', text: 'Waiting for the controller.', colour: 'gray' };
 }
 function render(s) {
