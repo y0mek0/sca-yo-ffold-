@@ -62,21 +62,10 @@ h1 {
   text-transform: uppercase;
 }
 .intro p { margin: 0; }
-.section-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 20px;
-  margin: 30px 0 18px;
-}
-.section-head h2 {
-  margin: 0;
-  font: 400 27px/1 Georgia, serif;
-}
-.section-head span { color: var(--muted); font: 11px Consolas, monospace; text-transform: uppercase; letter-spacing: .1em; }
 .professions {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 30px;
   gap: 12px;
   padding: 12px;
   background: var(--paper-deep);
@@ -195,11 +184,6 @@ footer { display: flex; justify-content: space-between; gap: 20px; margin-top: 1
       <p>Each team works with different sources and makes different decisions. Tracemark preserves that context, creates a fingerprint of the resulting record, anchors a compact proof to Hedera, and makes the record available for checking through Mirror Node.</p>
     </div>
   </header>
-
-  <div class="section-head">
-    <h2>Six workflows, each adapted to its own sources and decisions</h2>
-    <span>01—06 / working paths</span>
-  </div>
 
   <section class="professions" aria-label="Tracemark professions">
     <article class="profession highlight">
