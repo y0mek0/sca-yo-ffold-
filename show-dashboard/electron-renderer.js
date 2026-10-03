@@ -197,7 +197,30 @@ function routeHashscanView(view, targetUrl) {
 
 let hashscanTarget = '';
 const hashscanView = document.querySelector('#hashscan-view');
-hashscanView?.addEventListener('did-finish-load', () => routeHashscanView(hashscanView, hashscanTarget));
+function resizeHashscanView() {
+  if (!hashscanView?.parentElement) return;
+  const rect = hashscanView.parentElement.getBoundingClientRect();
+  const width = Math.max(0, Math.floor(rect.width - 16));
+  const height = Math.max(0, Math.floor(rect.height - 16));
+  hashscanView.style.position = 'absolute';
+  hashscanView.style.left = '8px';
+  hashscanView.style.top = '8px';
+  hashscanView.style.width = `${width}px`;
+  hashscanView.style.height = `${height}px`;
+  hashscanView.style.display = 'flex';
+}
+window.addEventListener('resize', resizeHashscanView);
+requestAnimationFrame(resizeHashscanView);
+hashscanView?.addEventListener('did-finish-load', () => {
+  routeHashscanView(hashscanView, hashscanTarget);
+  setTimeout(() => {
+    hashscanView.executeJavaScript(`(() => {
+      const accept = [...document.querySelectorAll('button,[role="button"]')].find((node) => /accept|agree|allow|consent/i.test(node.textContent || ''));
+      if (accept) accept.click();
+      return Boolean(accept);
+    })()`, true).catch(() => {});
+  }, 1800);
+});
 
 function renderState(state) {
   const proofs = Array.isArray(state?.proofs) ? state.proofs : [];
@@ -216,6 +239,7 @@ function renderState(state) {
   const hashscan = latestProof?.hashscanUrl || '';
   if (hashscanView && hashscan && hashscanTarget !== hashscan) {
     hashscanTarget = hashscan;
+    resizeHashscanView();
     hashscanView.setAttribute('src', 'https://hashscan.io');
   }
 
