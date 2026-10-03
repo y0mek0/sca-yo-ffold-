@@ -10,6 +10,7 @@ const REPO = process.env.TRACEMARK_REPO || 'C:\\Users\\azi\\Documents\\prro_gram
 const STATE_FILE = path.join(DEMO_DIR, 'runtime', 'state.json');
 const PORT = 4173;
 let mainWindow;
+let hashscanWindow;
 let demoServer;
 let bridgeServer;
 const terminals = new Map();
@@ -70,10 +71,43 @@ function startBridge() {
   bridgeServer.listen(4174, '127.0.0.1');
 }
 
-function openEvidence(url) {
-  if (mainWindow && !mainWindow.isDestroyed() && !mainWindow.webContents.isDestroyed()) {
-    mainWindow.webContents.send('hashscan-url', url);
+async function openEvidence(url) {
+  if (!mainWindow || mainWindow.isDestroyed() || typeof url !== 'string' || !url.startsWith('https://hashscan.io/')) return;
+  const target = new URL(url);
+  if (!hashscanWindow || hashscanWindow.isDestroyed()) {
+    hashscanWindow = new BrowserWindow({
+      parent: mainWindow,
+      width: 900,
+      height: 900,
+      minWidth: 640,
+      minHeight: 600,
+      title: 'HashScan / Hedera transaction',
+      backgroundColor: '#ffffff',
+      autoHideMenuBar: true,
+      webPreferences: { contextIsolation: true, sandbox: true }
+    });
+    hashscanWindow.on('closed', () => { hashscanWindow = null; });
   }
+  const bounds = mainWindow.getBounds();
+  hashscanWindow.setPosition(Math.max(0, bounds.x + bounds.width - 920), Math.max(0, bounds.y + 40));
+  hashscanWindow.show();
+  await hashscanWindow.loadURL('https://hashscan.io');
+  await hashscanWindow.webContents.executeJavaScript(`(() => {
+    const path = ${JSON.stringify(`${target.pathname}${target.search}${target.hash}`)};
+    const accept = [...document.querySelectorAll('button,[role="button"]')].find((node) => /accept|agree|allow|consent/i.test(node.textContent || ''));
+    if (accept) accept.click();
+    history.pushState({}, '', path);
+    window.dispatchEvent(new PopStateEvent('popstate'));
+    return document.title;
+  })()`);
+  setTimeout(() => {
+    if (!hashscanWindow || hashscanWindow.isDestroyed()) return;
+    hashscanWindow.webContents.executeJavaScript(`(() => {
+      const accept = [...document.querySelectorAll('button,[role="button"]')].find((node) => /accept|agree|allow|consent/i.test(node.textContent || ''));
+      if (accept) accept.click();
+      return Boolean(accept);
+    })()`).catch(() => {});
+  }, 1800);
 }
 
 function spawnTerminal(id, command, args, cwd = DEMO_DIR) {
@@ -166,6 +200,8 @@ if (!singleInstance) {
 function cleanup() {
   if (cleanedUp) return;
   cleanedUp = true;
+  try { hashscanWindow?.close(); } catch {}
+  hashscanWindow = null;
   if (stateTimer) { clearInterval(stateTimer); stateTimer = null; }
   for (const [id, terminal] of terminals) {
     terminals.delete(id);

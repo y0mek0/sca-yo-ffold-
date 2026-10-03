@@ -67,18 +67,12 @@ test('fresh launcher resets the previous run before showing intro', () => {
   assert.match(main, /resetState\(\);/);
 });
 
-test('single Electron window keeps HashScan embedded', () => {
-  const shell = read(files.shell);
+test('HashScan evidence opens as a real child transaction window', () => {
   const main = read(files.main);
-  const renderer = read(files.renderer);
-  assert.match(shell, /<webview/);
-  assert.match(renderer, /routeHashscanView/);
-  assert.match(renderer, /history\.pushState/);
-  assert.match(renderer, /https:\/\/hashscan\.io/);
-  assert.match(main, /webviewTag:\s*true/);
-  assert.match(renderer, /hashscanView/);
-  assert.match(renderer, /hashscanUrl/);
-  assert.doesNotMatch(main, /new BrowserWindow\([^)]*evidence/i);
+  assert.match(main, /hashscanWindow/);
+  assert.match(main, /title: 'HashScan \/ Hedera transaction'/);
+  assert.match(main, /loadURL\('https:\/\/hashscan\.io'\)/);
+  assert.match(main, /history\.pushState/);
 });
 
 test('launcher points at the repository and starts the control room', () => {
