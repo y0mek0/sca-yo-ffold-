@@ -77,14 +77,17 @@ h1 {
 .professions {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 20px 18px;
+  gap: 12px;
+  padding: 12px;
+  background: var(--paper-deep);
+  border: 1px solid var(--line);
 }
 .profession {
-  min-height: 0;
+  min-height: 264px;
   display: flex;
   flex-direction: column;
-  padding: 22px 20px 20px;
-  background: rgba(255,255,255,.34);
+  padding: 20px 19px 18px;
+  background: var(--paper);
   border: 0;
 }
 .profession.highlight {
@@ -150,12 +153,11 @@ h1 {
   color: var(--white);
   padding: 22px 24px 24px;
 }
-.proof-intro { border-right: 1px solid #586364; padding-right: 24px; }
 .proof-intro .eyebrow { color: var(--gold); }
 .proof-intro h2 { margin: 7px 0 8px; font: 400 28px/1 Georgia, serif; }
 .proof-intro p { margin: 0; color: #c6cfcc; font-size: 13px; }
 .proof-steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; align-items: start; }
-.proof-intro { border-right: 0; padding-right: 18px; }
+.proof-intro { padding-right: 18px; }
 .proof-step { position: relative; padding: 3px 14px 0 0; }
 .proof-step:not(:last-child)::after { content: "→"; position: absolute; top: 14px; right: 5px; color: var(--gold); font-size: 18px; }
 .proof-step b { display: block; margin: 8px 0 6px; color: var(--gold); font: 700 10px Consolas, monospace; letter-spacing: .09em; text-transform: uppercase; }
