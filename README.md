@@ -213,6 +213,22 @@ sample hash:      b822a0ff345e06eb5db1ea9cb37d6f322e91d78e6796779756dd2176ba0a7b
 hashscan topic:   https://hashscan.io/testnet/topic/0.0.10426202
 ```
 
+### Live transaction evidence
+
+The following links come from a fresh real testnet run in an isolated copy of this repository. The sample proof was submitted to HCS as sequence `156`, then read back through the Mirror Node with a matching SHA-256 digest.
+
+- [HashScan transaction — sequence 156](https://hashscan.io/testnet/transaction/0.0.10380366@1791040834.114522292)
+- [Mirror Node message — sequence 156](https://testnet.mirrornode.hedera.com/api/v1/topics/0.0.10426202/messages/156)
+- [HashScan topic — 0.0.10426202](https://hashscan.io/testnet/topic/0.0.10426202)
+
+```text
+transaction:       0.0.10380366@1791040834.114522292
+sequence:          156
+consensus:         1791040841.036746661
+sha256:            d2ed9bb7e3e75b922ea920e046b7681573e053fc466a363d95dab7df2d553f38
+mirror hash match: true
+```
+
 The first real submission in this repo published proof sequence 18 to the topic above (a real GitHub release watcher built on top of `createWatcherSignalProofEvent`), and `npm run mirror:verify` against the topic reports `ok: true` with `reason: mirror_hash_match` for that hash. Sequences 19–28 are public-API watcher proofs from `npm run watch:hbar-price` and `npm run watch:github-issues`, all anchored to the same topic.
 
 For a detailed log of the sandbox exercises — clean install, real `.env.local` round-trip, custom adapter end-to-end, broken env detection, token association check via Mirror Node, GitHub release watcher, HBAR price watcher, GitHub issues watcher — see `docs/SANDBOX_HISTORY.md`.

@@ -19,6 +19,20 @@ map, not a claim that a proof hash makes an external claim true.
 
 ## Live testnet evidence
 
+The latest isolated fresh-copy run produced a real HCS proof and independent Mirror verification:
+
+```text
+transaction:       0.0.10380366@1791040834.114522292
+sequence:          156
+consensus:         1791040841.036746661
+sha256:            d2ed9bb7e3e75b922ea920e046b7681573e053fc466a363d95dab7df2d553f38
+mirror hash match: true
+```
+
+- [HashScan transaction — sequence 156](https://hashscan.io/testnet/transaction/0.0.10380366@1791040834.114522292)
+- [Mirror Node message — sequence 156](https://testnet.mirrornode.hedera.com/api/v1/topics/0.0.10426202/messages/156)
+- [HashScan topic — 0.0.10426202](https://hashscan.io/testnet/topic/0.0.10426202)
+
 The latest repeat run produced:
 
 ```text
