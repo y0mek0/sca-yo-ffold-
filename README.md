@@ -21,18 +21,26 @@ In plain English: Tracemark shows what data the system saw, which decision or ac
 
 More detail: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md), [`docs/GETTING_STARTED.md`](docs/GETTING_STARTED.md), and [`docs/USE_CASES.md`](docs/USE_CASES.md).
 
+## Requirements
+
+- Node.js `>=20.18.3`
+- npm
+- Hedera testnet account and HCS topic for real submissions
+- `.env.local` copied from `.env.example`
+- Credentials are required only for real HCS/testnet flows; demo mode works without them
+
 ## What ships
 
-| Layer | What | Where |
-| --- | --- | --- |
-| Core | HCS proof log, local JSONL index, Mirror Node verification, Hedera setup Doctor, demo mode | `src/lib/proof`, `src/lib/index`, `src/lib/doctor`, `scripts/doctor.ts` |
-| Core+ working | Research Claim, AI Decision, Document/Office adapters with tests | `src/lib/adapters/research-claim.ts`, `ai-decision.ts`, `document-office.ts` |
-| Core+ roadmap factories | Browser Action, Payment Intent, Watcher Signal, RAG Memory typed factories | `src/lib/adapters/roadmap.ts` |
-| Real integrations | GitHub release watcher, GitHub issues watcher, HBAR price watcher (CoinGecko), SaucerSwap read-only pool snapshot, HTS treasury/token snapshot, and Payment Intent + real HBAR transfer — real testnet sequences | `src/lib/adapters/http-fetcher.ts`, `release-watcher.ts`, `github-issues-fetcher.ts`, `coingecko-fetcher.ts`, `price-watcher.ts`, `saucerswap-snapshot.ts`, `hts-treasury-snapshot.ts`, `payment-intent-execution.ts`, `scripts/watch-*.ts`, `scripts/payment-intent-hbar.ts` |
-| UI | Hero dashboard, proof index with kind filter, JSON APIs, colorised CLI output | `src/app/page.tsx`, `proofs/page.tsx`, `api/proofs`, `src/lib/cli/cli-output.ts` |
-| Contracts | Optional Solidity receipt registry with Hardhat compile/test flow | `packages/hardhat/contracts/TracemarkRegistry.sol`, `packages/hardhat/test/TracemarkRegistry.test.js` |
-| Validation | Local quality gate with `lint / typecheck / test / build / doctor / audit / verify` | root `package.json` scripts |
-| Docs | `README.md`, `AGENTS.md`, `docs/ARCHITECTURE.md`, `docs/GETTING_STARTED.md`, `docs/USE_CASES.md`, `docs/BOUNTY_CHECKLIST.md`, `docs/SANDBOX_HISTORY.md`, `docs/BOUNTY_EVIDENCE.md` | repo root |
+| Layer | What |
+| --- | --- |
+| Core | HCS proof log, local JSONL index, Mirror Node verification, setup Doctor, and demo mode |
+| Core+ adapters | Research Claim, AI Decision, and Document/Office adapters with tests |
+| Roadmap factories | Browser Action, Payment Intent, Watcher Signal, and RAG Memory typed factories |
+| Real integrations | GitHub release and issue watchers, HBAR price watcher, SaucerSwap and HTS read-only snapshots, and real HBAR transfer |
+| UI | Dashboard, proof index with kind filter, JSON APIs, and colorised CLI output |
+| Contracts | Optional Solidity receipt registry with Hardhat compile/test flow |
+| Validation | `lint`, `typecheck`, `test`, `build`, `doctor`, `audit`, and `verify` |
+| Docs | README, AGENTS, architecture, getting started, use cases, bounty checklist, sandbox history, and evidence |
 
 ## Quickstart
 
@@ -160,10 +168,10 @@ The execution proof contains the payer, receiver, amount in tinybar, Hedera tran
 
 The following adapters ship as typed factories so developers can wire them in without redesigning the ProofEvent schema. Each one was tested end-to-end against real testnet via the GitHub release watcher pattern.
 
-- `createBrowserActionProofEvent` — URL / action / result / screenshot hash for browser agents (Browser Use, Jev, Page Agent, Iris).
-- `createPaymentIntentProofEvent` — payer / receiver / asset / amount / policy before a payment is signed (x402, Blocky402, HBAR/USDC).
-- `createWatcherSignalProofEvent` — wallet, market, GitHub, or news signal proofs (FOMO Robinhood Radar, repo watcher, HBAR price watcher, GitHub issues watcher).
-- `createRagMemoryProofEvent` — question, answer, retrieved chunks hash (RAGFlow, MemPalace).
+- `createBrowserActionProofEvent` — URL, action, result, and screenshot hash for browser agents.
+- `createPaymentIntentProofEvent` — payer, receiver, asset, amount, and policy before a payment is signed.
+- `createWatcherSignalProofEvent` — wallet, market, GitHub, or news signal proofs.
+- `createRagMemoryProofEvent` — question, answer, and retrieved chunks hash.
 
 ## Hedera depth
 
