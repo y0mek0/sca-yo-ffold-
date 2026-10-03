@@ -5,7 +5,7 @@ against real Hedera testnet before the bounty submission. Every entry includes
 the real command output and the verification gate it passed.
 
 The goal was to answer: **how would a real developer use the template right after
-`npm create scaffold-hbar@latest -- --template y0mek0/tracemark`?**
+`npm create scaffold-hbar@latest -- tracemark-smoke --template y0mek0/tracemark --frontend nextjs-app --solidity-framework hardhat --package-manager npm --network testnet --ci --skip-hedera-skills --skip-install`?**
 
 ## Sandbox A — clean install, demo mode
 
