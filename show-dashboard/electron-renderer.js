@@ -181,6 +181,24 @@ function renderLiveNarrative(state) {
   document.querySelector('#live-look').textContent = narrative.look;
 }
 
+function routeHashscanView(view, targetUrl) {
+  if (!view || !targetUrl) return;
+  let target;
+  try { target = new URL(targetUrl); } catch { return; }
+  const path = `${target.pathname}${target.search}${target.hash}`;
+  view.executeJavaScript(`(() => {
+    const accept = [...document.querySelectorAll('button,[role="button"]')].find((node) => /accept|agree|allow|consent/i.test(node.textContent || ''));
+    if (accept) accept.click();
+    history.pushState({}, '', ${JSON.stringify(path)});
+    window.dispatchEvent(new PopStateEvent('popstate'));
+    return location.href;
+  })()`, true).catch(() => {});
+}
+
+let hashscanTarget = '';
+const hashscanView = document.querySelector('#hashscan-view');
+hashscanView?.addEventListener('did-finish-load', () => routeHashscanView(hashscanView, hashscanTarget));
+
 function renderState(state) {
   const proofs = Array.isArray(state?.proofs) ? state.proofs : [];
   const status = state?.status || 'waiting';
@@ -196,8 +214,10 @@ function renderState(state) {
   renderPipeline(state);
 
   const hashscan = latestProof?.hashscanUrl || '';
-  const hashscanView = document.querySelector('#hashscan-view');
-  if (hashscanView && hashscan && hashscanView.getAttribute('src') !== hashscan) hashscanView.setAttribute('src', hashscan);
+  if (hashscanView && hashscan && hashscanTarget !== hashscan) {
+    hashscanTarget = hashscan;
+    hashscanView.setAttribute('src', 'https://hashscan.io');
+  }
 
   const currentRecord = state?.source || latestProof?.source || 'Waiting for the first record';
   const activityRecord = document.querySelector('#activity-record');

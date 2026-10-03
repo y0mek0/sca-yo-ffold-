@@ -72,6 +72,9 @@ test('single Electron window keeps HashScan embedded', () => {
   const main = read(files.main);
   const renderer = read(files.renderer);
   assert.match(shell, /<webview/);
+  assert.match(renderer, /routeHashscanView/);
+  assert.match(renderer, /history\.pushState/);
+  assert.match(renderer, /https:\/\/hashscan\.io/);
   assert.match(main, /webviewTag:\s*true/);
   assert.match(renderer, /hashscanView/);
   assert.match(renderer, /hashscanUrl/);
