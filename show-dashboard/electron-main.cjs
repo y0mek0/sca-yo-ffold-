@@ -22,6 +22,18 @@ const nodeCommand = rawNodeCommand.replace(/^\"|\"$/g, '');
 app.commandLine.appendSwitch('disable-gpu');
 app.commandLine.appendSwitch('disable-gpu-compositing');
 
+function resetState() {
+  fs.mkdirSync(path.dirname(STATE_FILE), { recursive: true });
+  fs.writeFileSync(STATE_FILE, JSON.stringify({
+    stage: 'waiting',
+    status: 'waiting',
+    scenario: null,
+    active: null,
+    source: null,
+    proofs: []
+  }, null, 2));
+}
+
 function readState() {
   try { return JSON.parse(fs.readFileSync(STATE_FILE, 'utf8')); }
   catch { return { stage: 'intro', status: 'waiting', active: 'START', proofs: [] }; }
@@ -143,6 +155,7 @@ if (!singleInstance) {
 } else {
   app.on('second-instance', () => mainWindow?.show());
   app.whenReady().then(() => {
+    resetState();
     session.defaultSession.setPermissionRequestHandler((_webContents, _permission, callback) => callback(false));
     startDemoServer();
     startBridge();

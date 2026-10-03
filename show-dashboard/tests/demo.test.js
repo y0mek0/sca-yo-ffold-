@@ -59,6 +59,14 @@ test('presentation narration lives in the large left panel', () => {
   assert.doesNotMatch(panels, /STARTING THE PRESENTATION/);
 });
 
+test('fresh launcher resets the previous run before showing intro', () => {
+  const main = read(files.main);
+  assert.match(main, /function resetState\(\)/);
+  assert.match(main, /stage: 'waiting'/);
+  assert.match(main, /proofs: \[\]/);
+  assert.match(main, /resetState\(\);/);
+});
+
 test('single Electron window keeps HashScan embedded', () => {
   const shell = read(files.shell);
   const main = read(files.main);
