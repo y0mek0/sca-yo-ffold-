@@ -127,6 +127,10 @@ async function runProof({ source, script, args, comment }) {
   const output = `${result.stdout || ''}\n${result.stderr || ''}`;
   if (result.status !== 0) throw new Error(`${source} command failed (status ${result.status ?? 'unknown'}): ${clean(result.stderr || result.stdout || 'no command output').slice(-600)}`);
   const rawProofs = source === 'PAYMENT EXECUTION' ? parsePaymentProofs(output) : parseProofs(output, source);
+  state({ stage: 'normalize', status: 'running', active: source, comment: `The ${source.toLowerCase()} response is now a normalized Tracemark record.`, source, proofs: rawProofs });
+  await sleep(PAUSE);
+  state({ stage: 'hash', status: 'running', active: source, comment: 'The normalized record now has a deterministic SHA-256 fingerprint.', source, proofs: rawProofs });
+  await sleep(PAUSE);
   state({ stage: 'submitted', status: 'running', active: source, comment: 'Hedera returned new sequence numbers. Opening the public records.', source, proofs: rawProofs });
   const proofs = [];
   for (const proof of rawProofs) {

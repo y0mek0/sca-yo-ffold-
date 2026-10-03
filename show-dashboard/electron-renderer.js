@@ -92,6 +92,8 @@ function stageFor(state) {
   if (stage === 'verified') return { current: 'check', index: 4 };
   if (stage === 'submitted') return { current: 'write', index: 3 };
   if (stage === 'action' || stage === 'template') return { current: 'normalize', index: 1 };
+  if (stage === 'normalize') return { current: 'normalize', index: 1 };
+  if (stage === 'hash') return { current: 'hash', index: 2 };
   if (stage === 'local-app' || stage === 'scenario-transition' || stage === 'intro') return { current: 'read', index: 0 };
   return { current: 'read', index: 0 };
 }
@@ -109,6 +111,8 @@ function activityContextFor(state, latestProof) {
   if (state?.stage === 'intro') return 'Run is starting. No proof record has been written yet.';
   if (state?.stage === 'local-app') return 'Runtime is ready; waiting for the first source record.';
   if (state?.stage === 'action') return `Source adapter active: ${state.source || state.active || 'pending'}.`;
+  if (state?.stage === 'normalize') return `Normalized record prepared for ${state.source || state.active || 'the current source'}.`;
+  if (state?.stage === 'hash') return latestProof?.digest ? `SHA-256 fingerprint generated: ${latestProof.digest.slice(0, 18)}…` : 'SHA-256 fingerprint is being generated.';
   if (state?.stage === 'submitted') return latestProof?.sequence ? `HCS sequence ${latestProof.sequence} returned. Mirror check is in progress.` : 'HCS receipt returned. Mirror check is in progress.';
   if (state?.stage === 'verified') return latestProof?.hashMatch === true ? `Mirror digest matches the local fingerprint for ${state.source || state.active || 'this record'}.` : 'Mirror verification did not match the local fingerprint.';
   if (state?.stage === 'scenario-complete') return `${state.proofs?.length || 0} record(s) are verified in this scenario.`;

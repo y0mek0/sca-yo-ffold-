@@ -56,6 +56,8 @@ function commentaryEvent(s) {
     if (s.source === 'GITHUB RELEASE') return { label: 'DEVOPS · RELEASE', text: 'We are reading the release the engineering team is considering. The next proof will preserve the release data that this decision used.', colour: 'yellow' };
     if (s.source === 'GITHUB ISSUES') return { label: 'DEVOPS · OPEN ISSUES', text: 'Now we are checking the open issues that could affect the release decision. These inputs will be recorded alongside the release context.', colour: 'yellow' };
   }
+  if (s.stage === 'normalize') return { label: `${s.active || 'RECORD'} · NORMALIZE`, text: 'The adapter response is now a normalized Tracemark record. Proof activity shows the same record moving through the pipeline.', colour: 'blue' };
+  if (s.stage === 'hash') return { label: `${s.active || 'RECORD'} · SHA-256`, text: 'The normalized record now has a deterministic SHA-256 fingerprint. The full payload remains outside the HCS message.', colour: 'blue' };
   if (s.stage === 'submitted') return { label: `${s.active || 'RECORD'} · HCS RECEIPT`, text: 'The local record has produced a Hedera sequence. Look at Proof for the sequence and digest; HashScan is the public transaction view.', colour: 'green' };
   if (s.stage === 'verified') return { label: `${s.active || 'RECORD'} · VERIFIED`, text: 'Mirror Node returned the same fingerprint as the local record. Proof activity now marks this source as verified.', colour: 'green' };
   if (s.stage === 'scenario-complete' && s.scenario === 'devops') return { label: 'DEVOPS · DECISION RECORDED', text: 'The release inputs and deployment decision are now recorded and publicly verifiable. Read this pause before we switch to a Web3 protocol snapshot.', colour: 'green' };
@@ -93,6 +95,8 @@ function proofEvent(s) {
   if (s.stage === 'scenario-transition') return { label: `SOURCE SET / ${String(s.scenario || '').toUpperCase()}`, text: 'adapter set selected · no HCS write yet', colour: 'blue' };
   if (s.stage === 'template') return { label: 'PIPELINE / READY', text: 'fetch → normalize → hash → HCS → Mirror', colour: 'blue' };
   if (s.stage === 'action') return { label: `FETCH / ${s.source || s.active || 'SOURCE'}`, text: 'adapter running · local event pending', colour: 'yellow' };
+  if (s.stage === 'normalize') return { label: `NORMALIZE / ${s.source || s.active || 'SOURCE'}`, text: 'normalized record ready · local payload retained', colour: 'blue' };
+  if (s.stage === 'hash') return { label: `HASH / ${s.source || s.active || 'SOURCE'}`, text: latest ? `sha256 ${shortDigest(latest)}` : 'digest pending', colour: 'blue' };
   if (s.stage === 'submitted') return { label: `HCS / ${s.source || s.active || 'SOURCE'}`, text: latest ? `sequence ${latest.sequence} · digest ${shortDigest(latest)}` : 'sequence pending', colour: 'green' };
   if (s.stage === 'verified') return { label: `MIRROR / ${s.source || s.active || 'SOURCE'}`, text: latest ? `sequence ${latest.sequence} · hashMatch=${latest.hashMatch ? 'true' : 'false'} · consensus ${latest.consensus || 'pending'}` : 'Mirror result pending', colour: latest?.hashMatch ? 'green' : 'red' };
   if (s.stage === 'scenario-complete') return { label: 'SCENARIO / VERIFIED', text: `${s.proofs?.length || 0} verified record(s) in current scenario`, colour: 'green' };
