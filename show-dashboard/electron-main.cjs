@@ -161,6 +161,7 @@ function createWindow() {
     webPreferences: { preload: path.join(DEMO_DIR, 'electron-preload.cjs'), contextIsolation: true, sandbox: false, webviewTag: true }
   });
   mainWindow.loadFile(path.join(DEMO_DIR, 'electron-shell.html'));
+  mainWindow.maximize();
   mainWindow.webContents.once('did-finish-load', () => {
     startTerminals();
     stateTimer = setInterval(() => {
