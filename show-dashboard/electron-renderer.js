@@ -140,12 +140,54 @@ function renderRecords(proofs) {
   }).join('');
 }
 
+function liveNarrativeFor(state) {
+  const source = state?.source || state?.active || 'the current source';
+  const scenario = state?.scenario;
+  const stage = state?.stage;
+  if (stage === 'intro') return { label: 'SCENARIO 1 · DEVOPS / SRE', title: 'Release Safety Gate', text: 'We are starting with a DevOps release decision. We will read the release and its open issues, turn those inputs into a record, and check the public proof through Hedera.', look: 'LOOK HERE · THIS PAGE FIRST, THEN PROOF ACTIVITY' };
+  if (stage === 'local-app') return { label: 'RUNTIME READY', title: 'The local control room is ready', text: 'The local app and Doctor endpoint are ready. The first workflow is a DevOps release decision based on a release and its open issues.', look: 'LOOK HERE · DEPLOYMENT FOR RUNTIME READINESS' };
+  if (stage === 'scenario-transition' && scenario === 'devops') return { label: 'SCENARIO 1 · DEVOPS / SRE', title: 'Release Safety Gate', text: 'We are reading the release the engineering team is considering, checking open issues, and recording what this decision used. Tracemark will prove what was observed and recorded, not that the release is objectively safe.', look: 'LOOK HERE · ACTION CONSOLE FOR THE LIVE SOURCE' };
+  if (stage === 'template' && scenario === 'devops') return { label: 'DEVOPS / SRE', title: 'From source inputs to one decision record', text: 'The release and issue inputs will become one normalized record. Proof activity will show the current record; Proof will show only the technical Hedera receipt.', look: 'LOOK HERE · PROOF ACTIVITY FOR THE CURRENT RECORD' };
+  if (stage === 'action' && scenario === 'devops') return { label: `DEVOPS · ${source}`, title: source === 'GITHUB RELEASE' ? 'Reading the release under consideration' : 'Checking open issues', text: source === 'GITHUB RELEASE' ? 'We are reading the release the engineering team is considering.' : 'We are checking the open issues that could affect the release decision.', look: 'LOOK HERE · ACTION CONSOLE FOR THE TECHNICAL FETCH' };
+  if (stage === 'normalize') return { label: `${scenario === 'web3' ? 'WEB3' : 'DEVOPS'} · NORMALIZE`, title: 'The source becomes a normalized record', text: `The ${source} response is now represented as one structured Tracemark record. The full payload remains off-chain; this record is the input to the fingerprint step.`, look: 'LOOK HERE · PROOF ACTIVITY FOR THE CURRENT RECORD' };
+  if (stage === 'hash') return { label: `${scenario === 'web3' ? 'WEB3' : 'DEVOPS'} · SHA-256`, title: 'The record receives a deterministic fingerprint', text: 'The normalized record now has a SHA-256 fingerprint. This digest identifies the recorded payload without putting the full payload into the public HCS message.', look: 'LOOK HERE · PROOF FOR THE DIGEST' };
+  if (stage === 'submitted') return { label: `${scenario === 'web3' ? 'WEB3' : 'DEVOPS'} · HCS`, title: 'The compact proof is anchored to Hedera', text: 'The compact proof has produced a Hedera sequence. The public record contains the digest and minimal metadata; the full payload stays off-chain.', look: 'LOOK HERE · PROOF FOR TOPIC, SEQUENCE, AND DIGEST' };
+  if (stage === 'verified') return { label: `${scenario === 'web3' ? 'WEB3' : 'DEVOPS'} · MIRROR`, title: 'Mirror Node checks the same fingerprint', text: 'Mirror Node returned the Hedera record, and the digest matches the local fingerprint. This confirms what Tracemark recorded and when; it does not prove the external source was correct.', look: 'LOOK HERE · PROOF AND HASH MATCH YES' };
+  if (stage === 'scenario-complete' && scenario === 'devops') return { label: 'DEVOPS · RECORDED', title: 'The first workflow is complete', text: 'The release and issue inputs are recorded and publicly verifiable. Now we pause before switching to a different source set: a Web3 protocol snapshot.', look: 'LOOK HERE · HASHSCAN FOR THE PUBLIC TRANSACTION' };
+  if (stage === 'scenario-transition' && scenario === 'web3') return { label: 'SCENARIO 2 · WEB3 / PROTOCOL', title: 'Protocol Health Dashboard', text: 'The first workflow is complete. Now we use the same proof layer for a protocol snapshot. The sources change; the verification path does not.', look: 'LOOK HERE · THIS PAGE FOR THE NEW WORKFLOW' };
+  if (stage === 'template' && scenario === 'web3') return { label: 'WEB3 / PROTOCOL', title: 'A read-only protocol snapshot', text: 'We will read public market, token, treasury, and development data. These are observations at this time, not claims that the market or protocol state is objectively correct.', look: 'LOOK HERE · ACTION CONSOLE FOR EACH SOURCE' };
+  if (stage === 'action' && scenario === 'web3') {
+    const text = source === 'HBAR PRICE' ? 'We are reading the public HBAR price used by this protocol snapshot.' : source === 'SAUCERSWAP POOL' ? 'We are reading a SaucerSwap pool snapshot. This is read-only market data; no trade is executed.' : 'We are reading public HTS token and treasury state from the Hedera Mirror Node.';
+    return { label: `WEB3 · ${source}`, title: 'Reading a protocol input', text, look: 'LOOK HERE · ACTION CONSOLE FOR THE TECHNICAL FETCH' };
+  }
+  if (stage === 'scenario-complete' && scenario === 'web3') return { label: 'WEB3 · RECORDED', title: 'The protocol snapshot is complete', text: 'The observed protocol inputs are recorded and verified. This does not claim that the market was right; it shows what data was observed and when.', look: 'LOOK HERE · PROOF FOR THE VERIFIED RECEIPTS' };
+  if (stage === 'infographic') return { label: 'FINAL COMPARISON', title: 'Two workflows, one verification path', text: 'The DevOps and Web3 workflows used different sources and adapters. Both became normalized records, received SHA-256 fingerprints, and were checked through the same Hedera and Mirror proof path.', look: 'LOOK HERE · PROOF ACTIVITY AND HASHSCAN' };
+  if (stage === 'complete') return { label: 'DEMO COMPLETE', title: 'The shared proof layer is verified', text: 'Tracemark recorded what each workflow observed, created a deterministic fingerprint, anchored a compact proof to Hedera, and checked it through Mirror Node. The public transaction is available in HashScan.', look: 'LOOK HERE · PROOF FOR ALL RECORDS · HASHSCAN FOR PUBLIC EVIDENCE' };
+  return { label: 'LIVE PRESENTATION', title: 'Waiting for the next technical step', text: 'The presentation will continue as the real adapter and proof flow advances.', look: 'LOOK HERE · ACTION CONSOLE / PROOF / HASHSCAN' };
+}
+
+function renderLiveNarrative(state) {
+  const live = document.querySelector('#live-narrative');
+  const intro = document.querySelector('#intro-slides');
+  if (!live || !intro) return;
+  const active = state?.status && state.status !== 'waiting' && state.stage && state.stage !== 'waiting';
+  live.classList.toggle('active', Boolean(active));
+  intro.style.display = active ? 'none' : '';
+  if (!active) return;
+  const narrative = liveNarrativeFor(state);
+  document.querySelector('#live-label').textContent = narrative.label;
+  document.querySelector('#live-title').textContent = narrative.title;
+  document.querySelector('#live-text').textContent = narrative.text;
+  document.querySelector('#live-look').textContent = narrative.look;
+}
+
 function renderState(state) {
   const proofs = Array.isArray(state?.proofs) ? state.proofs : [];
   const status = state?.status || 'waiting';
   const scenario = scenarioFor(state);
   const currentStage = stageFor(state);
   const latestProof = proofs[proofs.length - 1];
+  renderLiveNarrative(state);
   document.querySelector('#status').textContent = status;
   document.querySelector('#progress').textContent = `${proofs.length} / ${RECORD_TOTAL} records`;
   document.querySelector('#activity-title').textContent = `${scenario.label} · ${scenario.title}`;

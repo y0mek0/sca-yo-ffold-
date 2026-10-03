@@ -46,14 +46,17 @@ test('orchestrator contains the two planned scenarios and real verification', ()
   assert.match(source, /await sleep\(PAUSE\)/);
 });
 
-test('Action Console uses human transition copy and fixed stage language', () => {
-  const source = read(files.panels);
-  assert.match(source, /First we will use Tracemark for a DevOps release decision/);
-  assert.match(source, /same proof layer for a Web3 protocol snapshot/);
-  assert.match(source, /read, normalize, hash, publish, verify/);
-  assert.match(source, /scenario-transition/);
-  assert.match(source, /scenario-complete/);
-  assert.doesNotMatch(source, /First we run a market snapshot/);
+test('presentation narration lives in the large left panel', () => {
+  const shell = read(files.shell);
+  const renderer = read(files.renderer);
+  const panels = read(files.panels);
+  assert.match(shell, /live-narrative/);
+  assert.match(renderer, /liveNarrativeFor/);
+  assert.match(renderer, /Release Safety Gate/);
+  assert.match(renderer, /SHA-256 fingerprint/);
+  assert.match(panels, /presentation=large left panel/);
+  assert.match(panels, /STATE \/ /);
+  assert.doesNotMatch(panels, /STARTING THE PRESENTATION/);
 });
 
 test('single Electron window keeps HashScan embedded', () => {

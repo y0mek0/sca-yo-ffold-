@@ -26,11 +26,10 @@ function title(label, subtitle) {
 }
 
 function intro() {
-  console.log('\n' + paint('cyan', '  HOW TO READ THIS DEMO'));
-  console.log('  First we will use Tracemark for a DevOps release decision.');
-  console.log('  Then we will use the same proof layer for a Web3 protocol snapshot.');
-  console.log('  The sources change. The proof flow stays the same: read, normalize, hash, publish, verify.');
-  console.log('  This window explains what the system saw, recorded, and checked.');
+  console.log('\n' + paint('cyan', '  ACTION CONSOLE / OPERATOR INPUT'));
+  console.log('  input=go');
+  console.log('  presentation=large left panel');
+  console.log('  output=technical state and receipt events');
 }
 
 function staticRole() {
@@ -47,31 +46,11 @@ function staticRole() {
 }
 
 function commentaryEvent(s) {
-  if (s.status === 'error') return { label: 'ERROR', text: `The live run stopped here. ${s.comment || 'Check the technical panels for the failure.'}`, colour: 'red' };
-  if (s.stage === 'intro') return { label: 'STARTING THE PRESENTATION', text: 'The introduction is over. We are starting with a DevOps release decision. Watch this panel for the explanation; Deployment will show local readiness, Proof will show Hedera receipts, and Proof activity will summarize the current record.', colour: 'yellow' };
-  if (s.stage === 'local-app') return { label: 'RUNTIME READY', text: 'The local app and Doctor endpoint are ready. Now look at the first scenario: a DevOps release decision based on a release and its open issues.', colour: 'green' };
-  if (s.stage === 'scenario-transition' && s.scenario === 'devops') return { label: 'SCENARIO 1 · DEVOPS / SRE', text: 'This is the Release Safety Gate. We will read the release the engineering team is considering, check open issues, record the deployment decision, and make that decision publicly verifiable.', colour: 'cyan' };
-  if (s.stage === 'template' && s.scenario === 'devops') return { label: 'HOW TO READ SCENARIO 1', text: 'The source data will become one decision record. As each source is processed, Proof will show the technical receipt and Proof activity will show which record is current.', colour: 'blue' };
-  if (s.stage === 'action' && s.scenario === 'devops') {
-    if (s.source === 'GITHUB RELEASE') return { label: 'DEVOPS · RELEASE', text: 'We are reading the release the engineering team is considering. The next proof will preserve the release data that this decision used.', colour: 'yellow' };
-    if (s.source === 'GITHUB ISSUES') return { label: 'DEVOPS · OPEN ISSUES', text: 'Now we are checking the open issues that could affect the release decision. These inputs will be recorded alongside the release context.', colour: 'yellow' };
-  }
-  if (s.stage === 'normalize') return { label: `${s.active || 'RECORD'} · NORMALIZE`, text: 'The adapter response is now a normalized Tracemark record. Proof activity shows the same record moving through the pipeline.', colour: 'blue' };
-  if (s.stage === 'hash') return { label: `${s.active || 'RECORD'} · SHA-256`, text: 'The normalized record now has a deterministic SHA-256 fingerprint. The full payload remains outside the HCS message.', colour: 'blue' };
-  if (s.stage === 'submitted') return { label: `${s.active || 'RECORD'} · HCS RECEIPT`, text: 'The local record has produced a Hedera sequence. Look at Proof for the sequence and digest; HashScan is the public transaction view.', colour: 'green' };
-  if (s.stage === 'verified') return { label: `${s.active || 'RECORD'} · VERIFIED`, text: 'Mirror Node returned the same fingerprint as the local record. Proof activity now marks this source as verified.', colour: 'green' };
-  if (s.stage === 'scenario-complete' && s.scenario === 'devops') return { label: 'DEVOPS · DECISION RECORDED', text: 'The release inputs and deployment decision are now recorded and publicly verifiable. Read this pause before we switch to a Web3 protocol snapshot.', colour: 'green' };
-  if (s.stage === 'scenario-transition' && s.scenario === 'web3') return { label: 'SCENARIO 2 · WEB3 / PROTOCOL', text: 'The first workflow is complete. Now we use the same proof layer for a protocol snapshot. The sources change; the verification path does not.', colour: 'cyan' };
-  if (s.stage === 'template' && s.scenario === 'web3') return { label: 'HOW TO READ SCENARIO 2', text: 'We will read market, token, treasury, and development data. Watch Action Console for the meaning of each source; Proof will only show the technical receipts.', colour: 'blue' };
-  if (s.stage === 'action' && s.scenario === 'web3') {
-    if (s.source === 'HBAR PRICE') return { label: 'WEB3 · HBAR PRICE', text: 'We are reading the public HBAR price used by this protocol snapshot. No transaction is executed by this read.', colour: 'yellow' };
-    if (s.source === 'SAUCERSWAP POOL') return { label: 'WEB3 · SAUCERSWAP', text: 'Now we are reading a SaucerSwap pool snapshot. This is read-only market data; no trade is executed.', colour: 'yellow' };
-    if (s.source === 'HTS TREASURY') return { label: 'WEB3 · HTS TREASURY', text: 'Next we are reading public HTS token and treasury state from the Hedera Mirror Node.', colour: 'yellow' };
-  }
-  if (s.stage === 'scenario-complete' && s.scenario === 'web3') return { label: 'WEB3 · REPORT RECORDED', text: 'The protocol snapshot is recorded and verified. This does not claim that the market was right; it shows exactly what data was observed and when.', colour: 'green' };
-  if (s.stage === 'infographic') return { label: 'FINAL COMPARISON', text: 'Different sources and adapters produced different records, but the proof path stayed the same. We are now comparing the two workflows.', colour: 'blue' };
-  if (s.stage === 'complete') return { label: 'DEMO COMPLETE', text: 'Both workflows became normalized records, received SHA-256 fingerprints, were anchored to Hedera, and were checked through the Mirror Node. The latest public transaction is visible in HashScan.', colour: 'green' };
-  return { label: 'WAITING', text: 'Waiting for the operator to start the technical presentation.', colour: 'gray' };
+  if (s.status === 'error') return { label: 'ERROR', text: `status=error comment=${s.comment || 'runtime failure'}`, colour: 'red' };
+  const scenario = s.scenario || 'none';
+  const source = s.source || s.active || 'none';
+  const proofs = Array.isArray(s.proofs) ? s.proofs.length : 0;
+  return { label: `STATE / ${String(s.stage || 'waiting').toUpperCase()}`, text: `scenario=${scenario} source=${source} proofs=${proofs} status=${s.status || 'waiting'}`, colour: s.stage === 'verified' || s.stage === 'complete' ? 'green' : 'blue' };
 }
 
 function deploymentEvent(s) {
@@ -125,8 +104,8 @@ function render(s) {
 
 function acceptedGoBriefing() {
   console.log('\n' + paint('cyan', '  GO ACCEPTED'));
-  console.log('  The technical presentation is starting with Scenario 1: DevOps / SRE.');
-  console.log('  Action Console will explain the live steps. Deployment will report runtime readiness. Proof will report HCS and Mirror receipts.');
+  console.log('  presentation=large left panel');
+  console.log('  state=technical run started');
 }
 
 async function main() {
