@@ -75,6 +75,17 @@ test('HashScan evidence opens as a real child transaction window', () => {
   assert.match(main, /history\.pushState/);
 });
 
+test('Proof activity exposes verified Mirror Node and HashScan links', () => {
+  const shell = read(files.shell);
+  const renderer = read(files.renderer);
+  assert.match(shell, /id="activity-links"/);
+  assert.match(shell, /activity-links/);
+  assert.match(renderer, /renderActivityLinks/);
+  assert.match(renderer, /testnet\.mirrornode\.hedera\.com/);
+  assert.match(renderer, /hashscan\.io/);
+  assert.match(renderer, /hashMatch/);
+});
+
 test('launcher points at the repository and starts the control room', () => {
   const launcher = read(files.launcher);
   assert.match(launcher, /TRACEMARK_REPO=/);

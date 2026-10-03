@@ -222,6 +222,25 @@ hashscanView?.addEventListener('did-finish-load', () => {
   }, 1800);
 });
 
+function proofLink(url, label, host) {
+  try {
+    const parsed = new URL(url);
+    if (parsed.protocol !== 'https:' || parsed.hostname !== host) return '';
+    return `<a href="${escapeHtml(parsed.href)}" target="_blank" rel="noopener noreferrer">${label} ↗</a>`;
+  } catch {
+    return '';
+  }
+}
+
+function renderActivityLinks(proof) {
+  if (!proof || (!proof.mirrorUrl && !proof.hashscanUrl)) return '';
+  const links = [
+    proofLink(proof.mirrorUrl, 'Mirror Node', 'testnet.mirrornode.hedera.com'),
+    proofLink(proof.hashscanUrl, 'HashScan', 'hashscan.io'),
+  ].filter(Boolean);
+  return links.length ? `<span>PUBLIC RECEIPTS</span>${links.join('')}` : '';
+}
+
 function renderState(state) {
   const proofs = Array.isArray(state?.proofs) ? state.proofs : [];
   const status = state?.status || 'waiting';
@@ -246,6 +265,8 @@ function renderState(state) {
   const currentRecord = state?.source || latestProof?.source || 'Waiting for the first record';
   const activityRecord = document.querySelector('#activity-record');
   if (activityRecord) activityRecord.textContent = `CURRENT RECORD · ${currentRecord} · STAGE ${currentStage.current} · ${resultFor(state, latestProof)}`;
+  const activityLinks = document.querySelector('#activity-links');
+  if (activityLinks) activityLinks.innerHTML = renderActivityLinks(latestProof);
 }
 
 let introSlide = 0;
